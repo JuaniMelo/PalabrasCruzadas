@@ -35,7 +35,7 @@ HU&&GO&&No es jefe, pero es 'Boss', y es mi perfume masculino favorito
 IGNA&&CIO&&Si te llamás así, te apodarán como una comida tradicional mexicana. Aunque no te guste el cheddar
 <fin>
 <t>MUJERES<t>
-AND&&REA&&En Argentina es de mujer, pero en otros lugares es de hombre. La actriz Del Bocca lo lleva como nombre de pila
+AND&&REA&&En Argentina es de mujer, pero en otros lugares es de hombre. La actriz Del Bocca lo lleva como nombre
 BAR&&BARA&&No sólo es un adjetivo, sino que también un nombre, como sucede con la cantante estadounidense de apellido Streisend
 CAR&&LA&&Si Carlos hubiera sido mujer, probablemente se llamaría como la cantante italiana Bruni
 DEN&&ISE&&La cantante chilena Rosenthal y la modelo argentina Dumas se llaman así
