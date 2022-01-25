@@ -71,7 +71,7 @@ class crRonda(RelativeLayout):
         self.raiz.add_widget(self.columnas)
         self.botones = BoxLayout(padding=(40, 5),spacing=60, size_hint=(1, .15))
         self.raiz.add_widget(self.botones)
-        self.btn_pasar = ButtonYellow(text='PASAPALABRA/INCORRECTO', font_name=self.FUENTE, font_size=25)
+        self.btn_pasar = ButtonRed(text='PASAPALABRA/INCORRECTO', font_name=self.FUENTE, font_size=25)
         self.btn_pasar.bind(on_release=self.apretar_boton_pasar)
         self.botones.add_widget(self.btn_pasar)
         self.btn_correcto = ButtonGreen(text='CORRECTO', font_name=self.FUENTE, font_size=25)
