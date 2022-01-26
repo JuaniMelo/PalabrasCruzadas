@@ -31,6 +31,7 @@ class SelectorNivel(Screen):
         self.reset_fondo_lado()
 
     def reset_fondo_lado(self):
+    #resetea el fondo para mostrar la imagen de menú pelado
         self.fondo_lado.clear_widgets()
         fondo = BgImage(source='images/fondos/sCruzadas_menu.png')
         self.fondo_lado.add_widget(fondo)
@@ -45,7 +46,7 @@ class SelectorNivel(Screen):
         for lvl in self.lista_niveles:
             if lvl[0] == nivel:
                 nivel_elegido = lvl
-        self.editor_nivel = MainMenu(lvl)
+        self.editor_nivel = MainMenu(nivel_elegido)
         self.fondo_lado.add_widget(self.editor_nivel)
 
     def crear_juego(self, nivel, ronda1, ronda2):

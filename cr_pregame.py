@@ -13,6 +13,18 @@ Window.left = 200
 Window.top = 140
 
 class crPregame(BoxLayout):
+    NARANJA=(224/255, 135/255, 56/255, 1)
+    AZUL=(38/255, 81/255, 142/255, 1)
+    AZUL_OSCURO=(30/255, 60/255, 100/255, 1)
+    ROJO=(193/255, 34/255, 34/255, 1)
+    VERDE=(77/255, 140/255, 32/255, 1)
+    AMARILLO=(204/255, 189/255, 18/255, 1)
+    MAGENTA=(180/255, 23/255, 222/255, 1)
+    FUENTE = 'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
+    FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
+    NORMAL_TOGGLE = 'images/botones/btn_claro.png'                         #'images/fondo_no_resaltado.png'
+    DOWN_TOGGLE = 'images/botones/btn_claro.png'                           #'images/fondo_resaltado2.png'
+
     def __init__(self, nombre_nivel, opa_text, opb_text, **kwargs):
         super().__init__(**kwargs)
         self.lista_a = ['Alista', 'A']
@@ -22,96 +34,93 @@ class crPregame(BoxLayout):
         self.opB = opb_text
         self.orientation = 'vertical'
         self.nivel_elegido = ''
-    #TITULO
-        '''ttl = ColorLabel(markup=True,                   #Label del título
-            text='[b]Pasa[/b]palabra',
-            font_size=80,
-            size_hint=(1, .4),
-            color=(.9, .5, .1, 1),
-            font_name='fonts/bebas_neue.ttf')
-        self.add_widget(ttl)'''
     #NIVELES
-        niv = Label(text=nombre_nivel,                    #Label del nivel
-            font_name='fonts/literal/Literal-Bold.ttf', 
-            color= (.9, .5, .1, 1), 
-            font_size= 40, 
-            size_hint=(1, .3))
+        niv = Button(disabled = True,
+            background_disabled_normal = 'images/botones/btn_oscuro.png', 
+            bold = True, 
+            text = nombre_nivel, 
+            color = self.NARANJA, 
+            font_name = 'fonts/bebas_neue.ttf',               #'fonts/bebas_neue.ttf'
+            font_size = 40, 
+            size_hint = (1, .2))
         self.add_widget(niv)
+    #ELEGI
+        elegi = Label(text=' ', 
+            font_name='fonts/bebas_neue.ttf', color= self.NARANJA, font_size= 30, size_hint=(1, .3))
+        elegi.height = elegi.height+80
+        self.add_widget(elegi)
+        espacio2 = Label(text='', size_hint=(1, .05))
+        self.add_widget(espacio2)
     #OPCIONES
+        self.opciones = BoxLayout(orientation='vertical',padding=10, spacing=0, size_hint=(1, 0.35))
+        self.add_widget(self.opciones)
         self.opcion1 = ToggleButton(text=self.opA,                    #Label del opcion 1
+            background_normal = self.NORMAL_TOGGLE,
+            background_down = self.DOWN_TOGGLE,
+            font_name = self.FUENTE,
             group = 'niveles', 
             halign = 'center', 
-            size_hint= (.5, .1), 
             pos_hint= {'center_x': .5, 'center_y': .5}, 
-            padding= (0, 50), 
-            font_size= 20, 
-            color= (0,0,0,1))
-        self.add_widget(self.opcion1)
-        espacio = Label(text='', size_hint=(1, .05))
-        self.add_widget(espacio)
+            font_size= 25,
+            color = (0, 0, 0, 1))
+        self.opciones.add_widget(self.opcion1)
         self.opcion2 = ToggleButton(text=self.opB,                    #Label del opcion 2
+            background_normal = self.NORMAL_TOGGLE,
+            background_down = self.DOWN_TOGGLE,
+            font_name = self.FUENTE,
             group = 'niveles', 
             halign = 'center', 
-            size_hint= (.5, .1), 
-            padding= (0, 50), 
             pos_hint= {'center_x': .5, 'center_y': .5}, 
-            font_size= 20, 
-            color= (0,0,0,1))
-        self.add_widget(self.opcion2)
+            font_size= 25,
+            color = (0, 0, 0, 1))
+        self.opciones.add_widget(self.opcion2)
         self.opcion1.bind(state=self.opA_estado)
         self.opcion2.bind(state=self.opB_estado)
-    #ELEGI
-        elegi = Label(text='Elegí qué juego querés jugar primero', 
-            font_name='fonts/literal/Literal-Bold.ttf', 
-            color= (.9, .5, .1, 1), 
-            font_size= 30, 
-            size_hint=(1, .2))
-        self.add_widget(elegi)
+        self.add_widget(Label(size_hint=(1, .03)))
     #BOTONES
-        botones = BoxLayout(size_hint=(1, .05), spacing=30, padding=(30, 0))
-        btn_ver = ButtonMagenta(text='VER', outline_width=3, outline_color=(0, 0, 0), font_size= 20, bold=True)
+        botones = BoxLayout(size_hint=(1, .1), spacing=30, padding=(30, 0))
+        btn_ver = ButtonOrange(text='VER', font_name='fonts/bebas_neue.ttf', font_size=25)
         btn_ver.bind(on_release=self.ver_lista)
         botones.add_widget(btn_ver)
-        btn_jugar = ButtonGreen(text='JUGAR', outline_width=3, outline_color=(0, 0, 0), font_size= 20, bold=True)        
+        btn_jugar = ButtonOrange(text='JUGAR', font_name='fonts/bebas_neue.ttf', font_size=25)        
         btn_jugar.bind(on_release=self.pasar_screen)
         botones.add_widget(btn_jugar)
         self.add_widget(botones)
+        espacio2 = Label(text='', size_hint=(1, .05))
     #SEPARADOR
         self.add_widget(Label(size_hint=(1, .05)))
 
     def opA_estado(self, instance, algo):
         if self.opcion1.state == 'down':
-            self.opcion1.background_down = ''
             self.lista_palabras = self.lista_a
             self.nivel_elegido = self.opA
-            self.opcion1.font_size = 22
-            self.opcion1.outline_color = (1, 1, 1)
-            self.opcion1.outline_width = 2
+            self.opcion1.font_size = 25
+            self.opcion1.font_name = self.FUENTE_BOLD
             self.opcion1.color = (0, 0, 0, 1)
-            print(f'Nivel elegido: {self.opA}')
+            #print(f'Nivel elegido: {self.opA}')
         else:
-            self.opcion1.background_normal = ''
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion1.font_size = 20
-            self.opcion1.outline_width = 0
-            print('No hay un nivel elegido')
+            self.opcion1.font_size = 25
+            self.opcion1.font_name = self.FUENTE
+            self.opcion1.color = (0, 0, 0, 1)
+            #print('No hay un nivel elegido')
     
     def opB_estado(self, instance, algo):
         if self.opcion2.state == 'down':
             self.lista_palabras = self.lista_b
             self.nivel_elegido = self.opB
-            self.opcion2.font_size = 22
-            self.opcion2.outline_color = (1, 1, 1)
-            self.opcion2.outline_width = 2
+            self.opcion2.font_size = 25
+            self.opcion2.font_name = self.FUENTE_BOLD
             self.opcion2.color = (0, 0, 0, 1)
-            print(f'Nivel elegido: {self.opB}')
+            #print(f'Nivel elegido: {self.opB}')
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion2.font_size = 20
-            self.opcion2.outline_width = 0
-            print('No hay un nivel elegido')
+            self.opcion2.font_size = 25
+            self.opcion2.font_name = self.FUENTE
+            self.opcion2.color = (0, 0, 0, 1)
+            #print('No hay un nivel elegido')
 
     def pasar_screen(self, instance):
         if self.nivel_elegido == '':
