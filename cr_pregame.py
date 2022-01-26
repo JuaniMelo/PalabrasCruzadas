@@ -7,7 +7,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.graphics import *
 from kivy.core.window import Window
-Window.size = (720, 480)
+Window.size = (660, 540)
 Window.borderless = False
 Window.left = 200
 Window.top = 140
@@ -17,17 +17,18 @@ class crPregame(BoxLayout):
         super().__init__(**kwargs)
         self.lista_a = ['Alista', 'A']
         self.lista_b = ['Blista', 'B']
+        self.nombre_nivel = nombre_nivel
         self.opA = opa_text
         self.opB = opb_text
         self.orientation = 'vertical'
         self.nivel_elegido = ''
     #TITULO
         ttl = ColorLabel(markup=True,                   #Label del título
-            text='[font=fonts/fira-master/FiraSans-Ultra.ttf]Pasa[/font]palabra',
+            text='[b]Pasa[/b]palabra',
             font_size=80,
             size_hint=(1, .4),
             color=(.9, .5, .1, 1),
-            font_name='fonts/fira-master/FiraSans-Medium.ttf')
+            font_name='fonts/bebas_neue.ttf')
         self.add_widget(ttl)
     #NIVELES
         niv = Label(text=nombre_nivel,                    #Label del nivel
@@ -78,15 +79,6 @@ class crPregame(BoxLayout):
     #SEPARADOR
         self.add_widget(Label(size_hint=(1, .05)))
 
-    def pasar_screen(self, instance):
-        if self.nivel_elegido == '':
-            pass
-        else:
-            #self.parent.source ='images/Vane.jpg'
-            self.parent.current_screen = crGame(self.nivel_elegido, self.lista_palabras)
-            self.parent.add_widget(self.parent.current_screen)
-            self.parent.remove_widget(self)
-
     def opA_estado(self, instance, algo):
         if self.opcion1.state == 'down':
             self.opcion1.background_down = ''
@@ -121,33 +113,17 @@ class crPregame(BoxLayout):
             self.opcion2.outline_width = 0
             print('No hay un nivel elegido')
 
-    def ver_lista(self, instance):
+    def pasar_screen(self, instance):
         if self.nivel_elegido == '':
-            pass
-        else:
-            self.parent.current_screen = crVer(self.nivel_elegido, self.lista_palabras)
-            self.parent.add_widget(self.parent.current_screen)
-            self.parent.remove_widget(self)
+            return
+        elif self.nivel_elegido == self.opA:
+            self.nivel_no_elegido = self.opB
+        elif self.nivel_elegido == self.opB:
+            self.nivel_no_elegido = self.opA
+        self.parent.parent.parent.crear_juego(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
 
-class crGame(BoxLayout):
-    def __init__(self, texto1, texto2, **kwargs):
-        super().__init__(**kwargs)
-        self.spacing = 50
-        self.padding = 60
-        lbl = Label(text=texto1, color=(1,0,0,1))
-        self.add_widget(lbl)
-        btn = Button(text=texto2[0])
-        btn.bind(on_release=self.volver)
-        self.add_widget(btn)
-
-    def volver(self, instance):
-        self.parent.current_screen = crPregame('NIVEL PRIMERO', 'Juego de la frutas', 'Juego de las prendas')
-        self.parent.add_widget(self.parent.current_screen)
-        self.parent.remove_widget(self)
-
-class crVer(BoxLayout):
-    pass
-
+    def ver_lista(self, instance):
+        self.parent.parent.parent.crear_editor(self.nombre_nivel)
 
 if __name__ == '__main__':
     class Pasapalabra(App):

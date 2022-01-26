@@ -34,9 +34,9 @@ class MainMenu(BoxLayout):
         self.listas_editables.add_widget(self.lbl_nombreA)
         self.lbl_nombreB = ColorLabel(text=nivel[2].upper(), color=(.5, 0, .5, 1), size_hint=(1, None), height=35, bold=True)
         self.listas_editables.add_widget(self.lbl_nombreB)
-        self.nivelA = Scroller(lista=obtener_lista_palabras(ruta_niveles,nivel[1]))
+        self.nivelA = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[1]))
         self.listas_editables.add_widget(self.nivelA)
-        self.nivelB = Scroller(lista=obtener_lista_palabras(ruta_niveles,nivel[2]))
+        self.nivelB = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[2]))
         self.listas_editables.add_widget(self.nivelB)
         self.btnes = BoxLayout(padding=5, spacing=5, size_hint=(1, None), height=40)
         self.add_widget(self.btnes)
@@ -185,11 +185,6 @@ class Header(BoxLayout):
         self.add_widget(btn_borrar)
 
 if __name__ == '__main__':
-    class MainApp(App):
-        def build(self):
-            menu = MainMenu(nivel=lista_niveles[0])
-            return menu
-
     Window.size = (860, 540)
     Window.left = 200
     Window.top = 140
