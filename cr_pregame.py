@@ -23,13 +23,13 @@ class crPregame(BoxLayout):
         self.orientation = 'vertical'
         self.nivel_elegido = ''
     #TITULO
-        ttl = ColorLabel(markup=True,                   #Label del título
+        '''ttl = ColorLabel(markup=True,                   #Label del título
             text='[b]Pasa[/b]palabra',
             font_size=80,
             size_hint=(1, .4),
             color=(.9, .5, .1, 1),
             font_name='fonts/bebas_neue.ttf')
-        self.add_widget(ttl)
+        self.add_widget(ttl)'''
     #NIVELES
         niv = Label(text=nombre_nivel,                    #Label del nivel
             font_name='fonts/literal/Literal-Bold.ttf', 
@@ -68,7 +68,7 @@ class crPregame(BoxLayout):
             size_hint=(1, .2))
         self.add_widget(elegi)
     #BOTONES
-        botones = BoxLayout(size_hint=(1, .2), spacing=30, padding=(30, 0))
+        botones = BoxLayout(size_hint=(1, .05), spacing=30, padding=(30, 0))
         btn_ver = ButtonMagenta(text='VER', outline_width=3, outline_color=(0, 0, 0), font_size= 20, bold=True)
         btn_ver.bind(on_release=self.ver_lista)
         botones.add_widget(btn_ver)
