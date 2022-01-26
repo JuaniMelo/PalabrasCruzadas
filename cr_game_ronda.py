@@ -112,8 +112,7 @@ class crRonda(RelativeLayout):
         self.btn_correcto.disabled = True
 
     def siguiente_ronda(self):
-        self.contador_rondas += 1
-        self.comenzar_segunda_ronda()               #PROGRAMAR ESTO EN LA SCREEN VIEW
+        self.parent.siguiente_ronda()               #PROGRAMAR ESTO EN LA SCREEN VIEW
 
     def obtener_pista(self, i):
         if len(self.lista_palabras[i][2]) < self.LONG_PARRAFO_PISTA:

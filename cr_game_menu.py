@@ -134,13 +134,11 @@ class crGameMenuFinal(BoxLayout):
         self.lbl_acertadas[i] = ColorLabel(text=self.palabras_acertadas[i], color=self.VERDE, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE)
         self.aciertos.add_widget(self.lbl_acertadas[i])
         self.lbl_acertadas[i]
-        print('foo')
 
     def agregar_error(self, i):
         self.lbl_no_acertadas.append('')
         self.lbl_no_acertadas[i] = ColorLabel(text=self.palabras_no_acertadas[i], color=self.ROJO, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE)
         self.errores.add_widget(self.lbl_no_acertadas[i])
-        print('foo')
 
     def animar_lbl(self, i, instance):
         anim = Animation()
