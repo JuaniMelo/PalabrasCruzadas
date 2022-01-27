@@ -2,6 +2,9 @@ from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.togglebutton import ToggleButton
+from kivy.core.window import Window
+from kivy.clock import Clock
 
 Builder.load_string('''
 <ColorLabel>:
@@ -36,6 +39,26 @@ Builder.load_string('''
             size: self.size
 ''')
 
+class HoverButton(Button):
+    def __init__(self, **kwargs):
+        super(HoverButton, self).__init__(**kwargs)
+        Window.bind(mouse_pos=self.on_mouse_pos)
+    
+    def on_mouse_pos(self, *args):
+        if not self.get_root_window():
+            return
+        pos = args[1]
+        if self.collide_point(*pos):
+            Clock.schedule_once(self.mouse_enter_css, 0)
+        else:
+            Clock.schedule_once(self.mouse_leave_css, 0)
+
+    def mouse_leave_css(self, *args):
+        Window.set_system_cursor('arrow')
+
+    def mouse_enter_css(self, *args):   
+        Window.set_system_cursor('hand')
+
 class BoxColor(RelativeLayout):
     def __init__(self, color=[0, 0, 0, 1], **kwargs):
         super().__init__(**kwargs)
@@ -56,7 +79,7 @@ class ImageLabel(Label):
         super().__init__(**kwargs)
         self.source = source
 
-class ButtonOrange(Button):
+class ButtonOrange(HoverButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.background_normal = 'images/botones/btn2_orange_normal.png'
@@ -99,3 +122,13 @@ class ButtonBlue(Button):
 class LabelLeft(Label):
    def on_size(self, *args):
       self.text_size = self.size
+
+class HoverButtonMenu(HoverButton, ToggleButton):
+    def __init__(self, **kwargs):
+        super(HoverButtonMenu, self).__init__(**kwargs)
+
+    def mouse_leave_css(self, *args):
+        self.background_normal = 'images/botones/btn_claro.png'
+
+    def mouse_enter_css(self, *args):   
+        self.background_normal = 'images/botones/btn_oscuro.png'

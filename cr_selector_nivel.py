@@ -9,7 +9,7 @@ from cr_registro import *
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 Window.size = (960, 540)
-Window.borderless = True
+Window.borderless = False
 Window.left = 100
 Window.top = 140
 
@@ -22,9 +22,9 @@ class SelectorNivel(Screen):
         self.init_layout()
         
     def init_layout(self):
-        self.main_layout= BoxLayout()
+        self.main_layout= BoxLayout(padding = (0, 5))
         self.add_widget(self.main_layout)
-        self.scroll_menu=crPregameMenu(self.lista_niveles, size_hint=(None, 1), width=200)
+        self.scroll_menu=scMarco(self.lista_niveles, size_hint=(None, 1), width=200)
         self.main_layout.add_widget(self.scroll_menu)
         self.fondo_lado = BgImage(source='images/fondos/sCruzadas_menu.png')
         self.main_layout.add_widget(self.fondo_lado)
@@ -56,6 +56,10 @@ class SelectorNivel(Screen):
 if __name__ == '__main__':
     class MiApp(App):
         def build(self):
+            Window.bind(on_resize=self.fix_size)
             return SelectorNivel()
+
+        def fix_size(self, instance, width, height):
+            Window.size = ((960, 540))
 
     MiApp().run()

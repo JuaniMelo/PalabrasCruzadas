@@ -13,19 +13,20 @@ Window.left = 200
 Window.top = 140
 
 class crPregame(BoxLayout):
-    NARANJA=(224/255, 135/255, 56/255, 1)
+    NARANJA=(190/255, 100/255, 0, 1)
     AZUL=(38/255, 81/255, 142/255, 1)
     AZUL_OSCURO=(30/255, 60/255, 100/255, 1)
     ROJO=(193/255, 34/255, 34/255, 1)
     VERDE=(77/255, 140/255, 32/255, 1)
     AMARILLO=(204/255, 189/255, 18/255, 1)
     MAGENTA=(180/255, 23/255, 222/255, 1)
+    NARANJA_CLARO=(1, .5, 0, 1)
     BLANCO=(1, 1, 1, 1)
     NEGRO=(0, 0, 0, 1)
     FUENTE = 'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
     FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
     NORMAL_TOGGLE = 'images/botones/btn_claro.png'                         #'images/fondo_no_resaltado.png'
-    DOWN_TOGGLE = 'images/botones/btn_claro.png'                           #'images/fondo_resaltado2.png'
+    DOWN_TOGGLE = 'images/botones/btn_claro_selec.png'                           #'images/fondo_resaltado2.png'
 
     def __init__(self, nombre_nivel, opa_text, opb_text, **kwargs):
         super().__init__(**kwargs)
@@ -58,25 +59,23 @@ class crPregame(BoxLayout):
     #OPCIONES
         self.opciones = BoxLayout(orientation='vertical',padding=10, spacing=0, size_hint=(1, 0.35))
         self.add_widget(self.opciones)
-        self.opcion1 = ToggleButton(text=self.opA,                    #Label del opcion 1
+        self.opcion1 = HoverButtonMenu(text=self.opA,                    #Label del opcion 1
             background_normal = self.NORMAL_TOGGLE,
             background_down = self.DOWN_TOGGLE,
             font_name = self.FUENTE,
             group = 'niveles', 
             halign = 'center', 
-            pos_hint= {'center_x': .5, 'center_y': .5}, 
             font_size= 25,
-            color = self.BLANCO)
+            color = self.NARANJA)
         self.opciones.add_widget(self.opcion1)
-        self.opcion2 = ToggleButton(text=self.opB,                    #Label del opcion 2
+        self.opcion2 = HoverButtonMenu(text=self.opB,                    #Label del opcion 2
             background_normal = self.NORMAL_TOGGLE,
             background_down = self.DOWN_TOGGLE,
             font_name = self.FUENTE,
             group = 'niveles', 
             halign = 'center', 
-            pos_hint= {'center_x': .5, 'center_y': .5}, 
             font_size= 25,
-            color = self.BLANCO)
+            color = self.NARANJA)
         self.opciones.add_widget(self.opcion2)
         self.opcion1.bind(state=self.opA_estado)
         self.opcion2.bind(state=self.opB_estado)
@@ -98,32 +97,32 @@ class crPregame(BoxLayout):
         if self.opcion1.state == 'down':
             self.lista_palabras = self.lista_a
             self.nivel_elegido = self.opA
-            self.opcion1.font_size = 25
-            self.opcion1.font_name = self.FUENTE_BOLD
-            self.opcion1.color = (0, 0, 0, 1)
+            #self.opcion1.font_size = 25
+            #self.opcion1.font_name = self.FUENTE_BOLD
+            self.opcion1.color = self.NARANJA_CLARO
             #print(f'Nivel elegido: {self.opA}')
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion1.font_size = 25
-            self.opcion1.font_name = self.FUENTE
-            self.opcion1.color = (0, 0, 0, 1)
+            #self.opcion1.font_size = 25
+            #self.opcion1.font_name = self.FUENTE
+            self.opcion1.color = self.NARANJA
             #print('No hay un nivel elegido')
     
     def opB_estado(self, instance, algo):
         if self.opcion2.state == 'down':
             self.lista_palabras = self.lista_b
             self.nivel_elegido = self.opB
-            self.opcion2.font_size = 25
-            self.opcion2.font_name = self.FUENTE_BOLD
-            self.opcion2.color = (0, 0, 0, 1)
+            #self.opcion2.font_size = 25
+            #self.opcion2.font_name = self.FUENTE_BOLD
+            self.opcion2.color = self.NARANJA_CLARO
             #print(f'Nivel elegido: {self.opB}')
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion2.font_size = 25
-            self.opcion2.font_name = self.FUENTE
-            self.opcion2.color = (0, 0, 0, 1)
+            #self.opcion2.font_size = 25
+            #self.opcion2.font_name = self.FUENTE
+            self.opcion2.color = self.NARANJA
             #print('No hay un nivel elegido')
 
     def pasar_screen(self, instance):
