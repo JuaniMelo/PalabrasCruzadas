@@ -1,6 +1,7 @@
 from kivy.uix.button import Button
 from kivy.app import App
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
 from archivo_exterior import obtener_lista_niveles
 from functools import partial
@@ -12,15 +13,15 @@ class crMenuNiveles(StackLayout):
         super().__init__(**kwargs)
         self.scroll_timeout = 0
         self.init_layout(niveles)
-        self.padding = 10
-        self.spacing = 10
+        self.padding = 8
+        self.spacing = 5
 
     def init_layout(self, niveles):
         self.botones = []
         self.niveles = niveles
         i = 0
         for nivel in self.niveles:
-            self.botones.append(ButtonBlue(text=nivel[0], size_hint=(1, None), height=50, font_name='fonts/bebas_neue.ttf', font_size=25))
+            self.botones.append(ButtonBlue(text=nivel[0], size_hint=(1, None), height=50, halign='left', font_name='fonts/bebas_neue.ttf', font_size=15))
             self.add_widget(self.botones[i])
             self.botones[i].bind(on_press=self.apretar_boton)
             i += 1
@@ -40,6 +41,7 @@ class crPregameMenu(ScrollView):
         super(crPregameMenu, self).__init__(**kwargs)
         niveles = crMenuNiveles(niveles)
         niveles.size_hint = (1, None)
+        self.padding = 5
         niveles.height = niveles.minimum_height
         self.add_widget(niveles)
 

@@ -20,6 +20,8 @@ class crPregame(BoxLayout):
     VERDE=(77/255, 140/255, 32/255, 1)
     AMARILLO=(204/255, 189/255, 18/255, 1)
     MAGENTA=(180/255, 23/255, 222/255, 1)
+    BLANCO=(1, 1, 1, 1)
+    NEGRO=(0, 0, 0, 1)
     FUENTE = 'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
     FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
     NORMAL_TOGGLE = 'images/botones/btn_claro.png'                         #'images/fondo_no_resaltado.png'
@@ -40,6 +42,8 @@ class crPregame(BoxLayout):
             bold = True, 
             text = nombre_nivel, 
             color = self.NARANJA, 
+            outline_width= 4,
+            outline_color=self.AZUL_OSCURO,
             font_name = 'fonts/bebas_neue.ttf',               #'fonts/bebas_neue.ttf'
             font_size = 40, 
             size_hint = (1, .2))
@@ -62,7 +66,7 @@ class crPregame(BoxLayout):
             halign = 'center', 
             pos_hint= {'center_x': .5, 'center_y': .5}, 
             font_size= 25,
-            color = (0, 0, 0, 1))
+            color = self.BLANCO)
         self.opciones.add_widget(self.opcion1)
         self.opcion2 = ToggleButton(text=self.opB,                    #Label del opcion 2
             background_normal = self.NORMAL_TOGGLE,
@@ -72,7 +76,7 @@ class crPregame(BoxLayout):
             halign = 'center', 
             pos_hint= {'center_x': .5, 'center_y': .5}, 
             font_size= 25,
-            color = (0, 0, 0, 1))
+            color = self.BLANCO)
         self.opciones.add_widget(self.opcion2)
         self.opcion1.bind(state=self.opA_estado)
         self.opcion2.bind(state=self.opB_estado)
