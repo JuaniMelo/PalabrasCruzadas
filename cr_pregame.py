@@ -82,7 +82,7 @@ class crPregame(BoxLayout):
         self.add_widget(Label(size_hint=(1, .03)))
     #BOTONES
         botones = BoxLayout(size_hint=(1, .1), spacing=30, padding=(30, 0))
-        btn_ver = ButtonOrange(text='VER', font_name='fonts/bebas_neue.ttf', font_size=25)
+        btn_ver = ButtonOrange(text='EDITAR', font_name='fonts/bebas_neue.ttf', font_size=25)
         btn_ver.bind(on_release=self.ver_lista)
         botones.add_widget(btn_ver)
         btn_jugar = ButtonOrange(text='JUGAR', font_name='fonts/bebas_neue.ttf', font_size=25)        

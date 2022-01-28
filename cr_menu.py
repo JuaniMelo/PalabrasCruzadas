@@ -48,6 +48,7 @@ class crPregameMenu(ScrollView):
     #PARAMETROS: (niveles= LISTA con 3 elementos: Nombre del conjunto de niveles, nombre del primer nivel, nombre del segundo nivel)  SACAR DE 'obtener_lista_niveles'
     def __init__(self, niveles, **kwargs):
         super(crPregameMenu, self).__init__(**kwargs)
+        self.scroll_timeout = 0
         niveles = crMenuNiveles(niveles)
         niveles.size_hint = (1, None)
         niveles.height = niveles.minimum_height
