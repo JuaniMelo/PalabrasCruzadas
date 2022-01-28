@@ -4,7 +4,7 @@ from kivy.app import App
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
-from archivo_exterior import obtener_lista_niveles
+from archivo_exterior import obtener_lista_niveles, guardar_nuevo_nivel
 from functools import partial
 from color_label import ButtonBlue, HoverButton
 from kivy.uix.textinput import TextInput
@@ -74,15 +74,18 @@ class scMarco(BoxLayout):
         self.ingreso.add_widget(self.agregar)
 
     def apretar_boton_agregar(self, instance):
-        if self.nivel_input.text == '' or self.nivel_input.text == ' ':
+        if self.nivel_input.text.isspace():
+            return
+        elif self.nivel_input.text == '':
             return
         else:
             nivel_a_crear = self.nivel_input.text
         self.nivel_input.text = ''
+        guardar_nuevo_nivel(nivel_a_crear)
         self.crear_nivel(nivel_a_crear)
     
     def crear_nivel(self, nombre_nivel):
-        self.niveles.append([nombre_nivel, 'Primera Ronda', 'Segunda Ronda'])
+        self.niveles.append([nombre_nivel, 'PRIMERA RONDA', 'SEGUNDA RONDA'])
         self.remove_widget(self.scMenu)
         self.scMenu = crPregameMenu(self.niveles)
         self.add_widget(self.scMenu, index=1)

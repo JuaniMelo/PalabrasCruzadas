@@ -1,3 +1,6 @@
+from encodings import utf_8
+
+
 destino = 'cr_files/niveles.txt'
 
 def obtener_lista_niveles(ruta):
@@ -44,5 +47,29 @@ def obtener_lista_palabras(ruta, titulo):
             linea = f.readline()
     return lista_palabras
 
-def guardar_informacion(texto):
-    pass
+def guardar_nuevo_nivel(nombre_nivel, ruta='cr_files/niveles.txt'):
+    with open(ruta, 'a', encoding='utf_8') as f:
+        texto = f'<n>{nombre_nivel.upper()}<n>\n<t>PRIMERA RONDA<t>\n<fin>\n<t>SEGUNDA RONDA<t>\n<fin>\n\n'
+        f.write(texto)
+
+def eliminar_info_nivel(nombre_nivel, ruta='cr_files/niveles.txt'):
+    texto_a_eliminar = f'<n>{nombre_nivel.upper()}<n>\n'
+    with open(ruta, 'r+', encoding='utf_8') as f:
+        lineas = f.readlines()
+        f.seek(0)
+        borrando = False
+        cont_fin = 0
+        espacio_extra_borrado = False
+        for linea in lineas:
+            if texto_a_eliminar not in linea and not borrando:
+                f.write(linea)
+            elif '<fin>' not in linea:
+                if espacio_extra_borrado:
+                    borrando = False
+                else:
+                    borrando = True
+            else:
+                cont_fin += 1
+                if cont_fin >= 2 and not espacio_extra_borrado:
+                    espacio_extra_borrado = True
+        f.truncate()

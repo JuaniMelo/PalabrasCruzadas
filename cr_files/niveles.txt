@@ -46,3 +46,9 @@ HIL&&DA&&La artista Lizarazu, quien cantó con Charlie García, ha contado que a
 ISA&&BEL&&Nombre de reinas. Durante el siglo XV en España, hoy en Inglaterra
 <fin>
 
+<n>MONO LOCO<n>
+<t>PRIMERA RONDA<t>
+<fin>
+<t>SEGUNDA RONDA<t>
+<fin>
+
