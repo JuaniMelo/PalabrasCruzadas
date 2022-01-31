@@ -7,9 +7,10 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import Image
-from color_label import ButtonBlue, ColorLabel, LabelLeft
+from color_label import ButtonBlue, ColorLabel, ImageLabel, LabelLeft
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.popup import Popup
 from kivy.graphics import *
 from kivy.core.window import Window
 from kivy.config import Config
@@ -24,9 +25,23 @@ Builder.load_string('''
             text: 'chau'
 ''')
 
+NARANJA=(190/255, 100/255, 0, 1)
+AZUL=(38/255, 81/255, 142/255, 1)
+AZUL_OSCURO=(30/255, 60/255, 100/255, 1)
+ROJO=(193/255, 34/255, 34/255, 1)
+VERDE=(77/255, 140/255, 32/255, 1)
+AMARILLO=(204/255, 189/255, 18/255, 1)
+MAGENTA=(180/255, 23/255, 222/255, 1)
+NARANJA_CLARO=(1, .5, 0, 1)
+BLANCO=(1, 1, 1, 1)
+NEGRO=(0, 0, 0, 1)
+FUENTE = 'fonts/bebas_neue.ttf'            #'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
+FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
+
 class EditorNiveles(BoxLayout):
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)
+        self.listo_para_guardar = True
         self.orientation = 'vertical'
         self.nivel = nivel
         self.titulo = TituloNivel(nivel[0])
@@ -44,27 +59,49 @@ class TituloNivel(RelativeLayout):
         self.init_layout()
 
     def init_layout(self):
-        self.btn_editar = Button(text='CAMBIAR', size_hint=(None, None), size=(20, 20), pos_hint={'right':.98, 'center_y':.5})
-        self.btn_editar.bind(on_release=self.editar_nombre)
+        self.btn_editar = Button(text='X', size_hint=(None, None), size=(20, 20), pos_hint={'right':.98, 'center_y':.5})
+        self.btn_editar.bind(on_release=self.eliminar_nivel)
         self.add_widget(self.btn_editar)
-        self.init_label()
-    
-    def editar_nombre(self, instance):
-        if instance.text == 'CAMBIAR':
-            self.nombre_nivel = self.lbl_nombre.text
-            self.remove_widget(self.lbl_nombre)
-            self.input = TextInput(text=self.nombre_nivel, hint_text='NOMBRE DEL NIVEL', size_hint=(1, 1))
-            self.add_widget(self.input, index=1)
-            instance.text = 'OK'
-        elif instance.text == 'OK':
-            self.nombre_nivel = self.input.text.upper()
-            self.remove_widget(self.input)
-            self.init_label()
-            instance.text = 'CAMBIAR'
-
-    def init_label(self):
-        self.lbl_nombre = Label(text=self.nombre_nivel,size_hint=(1, 1))            #, pos_hint={'center_x':.5, 'center_y':.5}
+        self.lbl_nombre = Button(background_normal='images/botones/btn_oscuro.png',
+            background_down='images/botones/btn_oscuro.png',
+            text=self.nombre_nivel,
+            size_hint=(1, 1),
+            color=NARANJA_CLARO,
+            font_name = FUENTE,
+            font_size = 30,
+            on_release=self.editar_nombre
+            )            #, pos_hint={'center_x':.5, 'center_y':.5}
         self.add_widget(self.lbl_nombre, index=1)
+    
+    def eliminar_nivel(self, instance):
+        if instance.text == 'X':
+            pass
+
+    def editar_nombre(self, instance):
+        if len(self.children) == 2:
+            self.parent.listo_para_guardar = False
+            self.nombre_input = TextInput(background_color=(1, 1, 1, 0),
+                halign='center',
+                text=self.nombre_nivel,
+                size_hint=(1, 1),
+                multiline=False,
+                write_tab=False,
+                foreground_color=BLANCO,
+                font_name = 'fonts/bebas_neue.ttf',
+                font_size = 30,
+                on_text_validate = self.confirmar_nombre
+                )            #, pos_hint={'center_x':.5, 'center_y':.5}
+            self.add_widget(self.nombre_input, index=1)
+            self.nombre_input.select_all()
+            self.lbl_nombre.opacity = 0
+
+    def confirmar_nombre(self, instance):
+        nombre=instance.text
+        self.lbl_nombre.text = nombre
+        self.nombre_nivel = nombre
+        self.lbl_nombre.opacity = 1
+        self.parent.listo_para_guardar = True
+        self.remove_widget(instance)
 
 class BotonesEditor(BoxLayout):
     def __init__(self, **kwargs):
@@ -74,10 +111,8 @@ class BotonesEditor(BoxLayout):
         self.size_hint=(1, None)
         self.height=40
         btn_cancelar = Button(text='Cancelar', on_release=self.cancelar)
-        #btn_cancelar.bind(on_release=self.cancelar)
         self.add_widget(btn_cancelar)
         btn_guardar = Button(text='Guardar',on_release=self.guardar)
-        #btn_guardar.bind(on_release=self.guardar)
         self.add_widget(btn_guardar)
     
     def cancelar(self, instance):
@@ -86,18 +121,29 @@ class BotonesEditor(BoxLayout):
         self.parent.parent.remove_widget(self.parent)
 
     def guardar(self, instance):
-        pass
+        if self.parent.listo_para_guardar:
+            renglon = []
+            for elemento in self.parent.editor_tabs.tab_ronda_1.content.hijo.elementos:
+                renglon.append(f'{elemento.lbl_PP.text}&&{elemento.lbl_SP.text}&&{elemento.lbl_pista.text}\n')
+            renglon.append('<fin>\n')
+            txt_ronda_1 = ''.join(renglon)
+            renglon = []
+            for elemento in self.parent.editor_tabs.tab_ronda_2.content.hijo.elementos:
+                renglon.append(f'{elemento.lbl_PP.text}&&{elemento.lbl_SP.text}&&{elemento.lbl_pista.text}\n')
+            renglon.append('<fin>\n')
+            txt_ronda_2 = ''.join(renglon)
+            txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text}<t>\n{txt_ronda_2}\n'
+            print(txt_a_guardar)
 
 class TabsEditor(TabbedPanel):
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)
-        self.default_tab_text = 'AGREGAR RONDA'
-        self.default_tab_content = Label(size_hint=(1, 1),)
+        self.tab_width = (Window.width - 4) / 2
         self.do_default_tab = False
         self.tab_ronda_1 = TabbedPanelHeader(text=nivel[1])
         self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[1]))
         self.add_widget(self.tab_ronda_1)
-        self.tab_ronda_2 = TabbedPanelHeader(text=nivel[2])
+        self.tab_ronda_2 = TabbedPanelHeader(text=nivel[2], size_hint=(1, 1))
         self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[2]))
         self.add_widget(self.tab_ronda_2)
 
@@ -105,10 +151,11 @@ class Scroller(ScrollView):
     def __init__(self, lista=[], **kwargs):
         super(Scroller, self).__init__(**kwargs)
         self.lista = lista
-        hijo = ListBox(self.lista)
-        hijo.size_hint = (1, None)
-        hijo.height = hijo.minimum_height
-        self.add_widget(hijo)
+        self.scroll_timeout = 0
+        self.hijo = ListBox(self.lista)
+        self.hijo.size_hint = (1, None)
+        self.hijo.height = self.hijo.minimum_height
+        self.add_widget(self.hijo)
 
 class ListBox(StackLayout):
     ALT_FUENTE = 15
@@ -125,11 +172,11 @@ class ListBox(StackLayout):
             self.add_widget(self.elementos[i])
     #CREAR INPUT
         self.enter_register = BoxLayout(padding=[5], spacing=5, size_hint=(1, None), height=40)
-        self.enter_register.PP_input = TextInput(multiline=False, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+        self.enter_register.PP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
         self.enter_register.add_widget(self.enter_register.PP_input)
-        self.enter_register.SP_input = TextInput(multiline=False, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+        self.enter_register.SP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE,write_tab = False)
         self.enter_register.add_widget(self.enter_register.SP_input)
-        self.enter_register.pista_input = TextInput(font_name=self.font, font_size=self.ALT_FUENTE)
+        self.enter_register.pista_input = TextInput(font_name=self.font, font_size=self.ALT_FUENTE,write_tab = False)
         self.enter_register.add_widget(self.enter_register.pista_input)
         self.enter_register.agregar = Button(text='Añadir', size_hint=(None,1), width=100, font_name=self.FUENTE, font_size=self.ALT_FUENTE)
         self.enter_register.agregar.bind(on_release=self.agregar_entrada)
@@ -153,7 +200,7 @@ class ListBox(StackLayout):
             self.enter_register.pista_input.text = ''
 
     def crear_elemento(self, i, textPP, textSP, textPista):
-        self.elementos.append(BoxLayout(padding=5, spacing=5, size_hint=(1, None), height=50))
+        self.elementos.append(BoxLayout(padding=5, spacing=5, size_hint=(1, None), height=40))
         self.elementos[i].index = i
         self.elementos[i].lbl_PP = Label(text=textPP, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, bold=True)
         self.elementos[i].add_widget(self.elementos[i].lbl_PP)
@@ -181,6 +228,7 @@ class ListBox(StackLayout):
         elemento = instance.parent
         i = elemento.index
         if instance.text == 'Editar' and self.editando == False:
+            self.parent.parent.parent.parent.listo_para_guardar = False
             instance.text = 'Aceptar'
             self.editando = True
         #Salva el texto
@@ -192,13 +240,14 @@ class ListBox(StackLayout):
             elemento.remove_widget(elemento.lbl_SP)
             elemento.remove_widget(elemento.lbl_pista)
         #Crea los inputs
-            elemento.PP_input = TextInput(multiline=False, halign='center', text=PP_text, size_hint=(0.1,.6), font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+            elemento.PP_input = TextInput(multiline=False, halign='center', text=PP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
             elemento.add_widget(elemento.PP_input, index = 2)
-            elemento.SP_input = TextInput(multiline=False, halign='center', text=SP_text, size_hint=(0.1,.6), font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+            elemento.SP_input = TextInput(multiline=False, halign='center', text=SP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
             elemento.add_widget(elemento.SP_input, index = 2)
-            elemento.pista_input = TextInput(multiline=False, size_hint=(1,.6), text=pista_text, font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+            elemento.pista_input = TextInput(multiline=False, size_hint=(1,1), text=pista_text, font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
             elemento.add_widget(elemento.pista_input, index = 2)
         elif instance.text == 'Aceptar' and self.editando == True:
+            self.parent.parent.parent.parent.listo_para_guardar = True
             instance.text = 'Editar'
             self.editando = False
         #Salva el texto
@@ -231,7 +280,7 @@ if __name__ == '__main__':
 
     class MainApp(App):
         def build(self):
-            return EditorNiveles(nivel=lista_niveles[0])
+            return EditorNiveles(nivel=lista_niveles[1])
 
     MainApp().run()
 
