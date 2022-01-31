@@ -2,15 +2,39 @@ from kivy.app import App
 from kivy.animation import Animation
 from kivy.uix.togglebutton import ToggleButton
 from color_label import *
+from archivo_exterior import obtener_lista_palabras
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.graphics import *
 from kivy.core.window import Window
+from kivy.uix.popup import Popup
+from kivy.lang import Builder
 Window.size = (660, 540)
 Window.borderless = False
 Window.left = 200
 Window.top = 140
+
+Builder.load_string('''
+<BoxError>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Nivel incompleto. Agregue contenido para jugar'
+        Button:
+            id : btn
+            text: 'Aceptar'
+''')
+
+class MiPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ids.btn.bind(on_release=self.btn_ok)
+
+    def btn_ok(self, instance):
+        self.parent.dismiss()
+        #self.parent.parent.remove_widget(self.parent.parent.box_error)
+        #print('FOO')
 
 class crPregame(BoxLayout):
     NARANJA=(190/255, 100/255, 0, 1)
@@ -126,12 +150,21 @@ class crPregame(BoxLayout):
             #print('No hay un nivel elegido')
 
     def pasar_screen(self, instance):
+    #Chequea que las listas de rondas no estén vacías
         if self.nivel_elegido == '':
             return
         elif self.nivel_elegido == self.opA:
             self.nivel_no_elegido = self.opB
+            if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
+                self.parent.box_error = BoxError()
+                self.parent.add_widget(self.box_error)
+                return
         elif self.nivel_elegido == self.opB:
             self.nivel_no_elegido = self.opA
+            if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
+                self.box_error = BoxError()
+                self.add_widget(self.box_error)
+                return
         self.parent.parent.parent.crear_juego(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
 
     def ver_lista(self, instance):

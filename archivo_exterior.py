@@ -3,7 +3,7 @@ from encodings import utf_8
 
 destino = 'cr_files/niveles.txt'
 
-def obtener_lista_niveles(ruta):
+def obtener_lista_niveles(ruta='cr_files/niveles.txt'):
     lista_niveles = []
     lista_aux = []
     with open(ruta, 'r', encoding='utf-8') as f:
@@ -22,7 +22,7 @@ def obtener_lista_niveles(ruta):
                     lista_aux = []
     return lista_niveles        # Devuelve una lista con listas de cada nivel: [[Nombre nivel, primer juego, segundo juego], ['Prendas y Frutas', 'prendas', 'frutas']]
         
-def obtener_lista_grupos(ruta):
+def obtener_lista_grupos(ruta='cr_files/niveles.txt'):
     lista_grupos = []
     with open(ruta, 'r', encoding='utf-8') as f:
         f = f.readlines()
@@ -33,7 +33,7 @@ def obtener_lista_grupos(ruta):
                 lista_grupos.append(renglon)
     return lista_grupos
 
-def obtener_lista_palabras(ruta, titulo):
+def obtener_lista_palabras(titulo, ruta='cr_files/niveles.txt'):
     lista_palabras = []
     with open(ruta, 'r', encoding='utf-8') as f:
         linea = f.readline()
@@ -72,4 +72,28 @@ def eliminar_info_nivel(nombre_nivel, ruta='cr_files/niveles.txt'):
                 cont_fin += 1
                 if cont_fin >= 2 and not espacio_extra_borrado:
                     espacio_extra_borrado = True
+        f.truncate()
+    
+def guardar_cambios_nivel(nombre_nivel, texto_a_guardar, ruta='cr_files/niveles.txt'):
+    with open(ruta, 'r+', encoding='utf_8') as f:
+        nombre_nivel = f'<n>{nombre_nivel.upper()}<n>\n'
+        f.seek(0)
+        lineas = f.readlines()
+        f.seek(0)
+        borrando = False
+        cont_fin = 0
+        espacio_extra_borrado = False
+        for linea in lineas:
+            if nombre_nivel not in linea and not borrando:
+                f.write(linea)
+            elif '<fin>' not in linea:
+                if espacio_extra_borrado:
+                    borrando = False
+                else:
+                    borrando = True
+            else:
+                cont_fin += 1
+                if cont_fin >= 2 and not espacio_extra_borrado:
+                    espacio_extra_borrado = True
+                    f.write(texto_a_guardar)
         f.truncate()

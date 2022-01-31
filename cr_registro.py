@@ -34,9 +34,9 @@ class MainMenu(BoxLayout):
         self.listas_editables.add_widget(self.lbl_nombreA)
         self.lbl_nombreB = ColorLabel(text=nivel[2].upper(), color=(.5, 0, .5, 1), size_hint=(1, None), height=35, bold=True)
         self.listas_editables.add_widget(self.lbl_nombreB)
-        self.nivelA = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[1]))
+        self.nivelA = Scroller(lista=obtener_lista_palabras(nivel[1]))
         self.listas_editables.add_widget(self.nivelA)
-        self.nivelB = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[2]))
+        self.nivelB = Scroller(lista=obtener_lista_palabras(nivel[2]))
         self.listas_editables.add_widget(self.nivelB)
         self.btnes = BoxLayout(padding=5, spacing=5, size_hint=(1, None), height=40)
         self.add_widget(self.btnes)
@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
     nombre = 'mujeres'
     ruta_niveles = 'cr_files/niveles.txt'
-    lista_palabras = obtener_lista_palabras(ruta_niveles, nombre)
+    lista_palabras = obtener_lista_palabras(nombre, ruta_niveles)
     lista_niveles = obtener_lista_niveles(ruta_niveles)
     print(lista_niveles)
     print(lista_niveles[0])

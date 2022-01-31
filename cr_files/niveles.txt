@@ -24,30 +24,14 @@ VESTI&&DO&&En el sur de México y Centroamérica, las mujeres indígenas visten 
 
 <n>HOMBRES Y MUJERES<n>
 <t>HOMBRES<t>
-ALB&&ERTO&&El Flaco Spinetta, Durero, Einstein y el Presidente Fernández se llaman así
-BRU&&NO&&Batman, uno de los superhéroes más famosos, esconde su verdadera identidad. Él es un multimillonario llamado Díaz ...
-CAR&&LOS&&Grandes músicos argentinos comparten el mismo nombre: García, Gardel y hasta La Mona Jimenez se llaman ...
-DA&&NIEL&&Puede ser Travieso o actuar de Harry Potter, pero su nombre será siempre ...
-ESTE&&BAN&&Sentado en este banquito recuerdo que el segundo nombre del cantante Juanes es ...
-FRAN&&CISCO&&El primer Papa argentino o el último dictador de España se llaman ...
-GUI&&DO&&Kaczka y el hermano de Silvia Suller comparten este nombre
-HU&&GO&&No es jefe, pero es 'Boss', y es mi perfume masculino favorito
-IGNA&&CIO&&Si te llamás así, te apodarán como una comida tradicional mexicana. Aunque no te guste el cheddar
 <fin>
 <t>MUJERES<t>
-AND&&REA&&En Argentina es de mujer, pero en otros lugares es de hombre. La actriz Del Bocca lo lleva como nombre de pila
-BAR&&BARA&&No sólo es un adjetivo, sino que también un nombre, como sucede con la cantante estadounidense de apellido Streisend
-CAR&&LA&&Si Carlos hubiera sido mujer, probablemente se llamaría como la cantante italiana Bruni
-DEN&&ISE&&La cantante chilena Rosenthal y la modelo argentina Dumas se llaman así
-ER&&ICA&&Para Casados con Hijos, encarnó de manera perfecta a la bipolar María Elena Fuseneco. Su apellido es Rivas, y su nombre ...
-FLO&&RENCIA&&Nombre primaveral muy común entre las mujeres. Desde Peña hasta De la V
-GRAC&&IELA&&Para agradecer, la gente suele nombrar a la actriz Borges o a la vedette Alfano
-HIL&&DA&&La artista Lizarazu, quien cantó con Charlie García, ha contado que ama llamarse ...
-ISA&&BEL&&Nombre de reinas. Durante el siglo XV en España, hoy en Inglaterra
 <fin>
 
 <n>MONO LOCO<n>
 <t>PRIMERA RONDA<t>
+NA&&VARRO&&MONTOYA: ARQUERO DE BOCA, DE PELO LARGO Y CARA DE MALO
+CU&&LO&&LENTE ATADO A UNA CADENA QUE SE COLOCA EN EL OJO PARA VER MEJOR
 <fin>
 <t>SEGUNDA RONDA<t>
 <fin>

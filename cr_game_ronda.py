@@ -193,7 +193,7 @@ class crRonda(RelativeLayout):
 if __name__ == '__main__':
 
     nombre_nivel = 'HOMBRES'
-    lista_palabras = obtener_lista_palabras('cr_files/niveles.txt', nombre_nivel)
+    lista_palabras = obtener_lista_palabras(nombre_nivel)
 
     class JugarRonda(App):
         def build(self):

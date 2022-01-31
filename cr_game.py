@@ -24,7 +24,7 @@ class Juego(Screen):
         self.init_layout()
         
     def init_layout(self):
-        lista_palabras = obtener_lista_palabras('cr_files/niveles.txt', self.primera_ronda)
+        lista_palabras = obtener_lista_palabras(self.primera_ronda)
         self.juego = crRonda(self.primera_ronda, lista_palabras)
         self.add_widget(self.juego)
 
@@ -32,7 +32,7 @@ class Juego(Screen):
         self.cont_rondas += 1
         if self.cont_rondas < 2:
             self.clear_widgets()
-            lista_palabras = obtener_lista_palabras('cr_files/niveles.txt', self.segunda_ronda)
+            lista_palabras = obtener_lista_palabras(self.segunda_ronda)
             self.juego = crRonda(self.segunda_ronda, lista_palabras)
             self.add_widget(self.juego)
         else:

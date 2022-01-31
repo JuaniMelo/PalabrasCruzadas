@@ -1,4 +1,4 @@
-from archivo_exterior import obtener_lista_niveles, obtener_lista_palabras
+from archivo_exterior import obtener_lista_niveles, obtener_lista_palabras, guardar_cambios_nivel
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.relativelayout import RelativeLayout
@@ -124,15 +124,16 @@ class BotonesEditor(BoxLayout):
         if self.parent.listo_para_guardar:
             renglon = []
             for elemento in self.parent.editor_tabs.tab_ronda_1.content.hijo.elementos:
-                renglon.append(f'{elemento.lbl_PP.text}&&{elemento.lbl_SP.text}&&{elemento.lbl_pista.text}\n')
+                renglon.append(f'{elemento.lbl_PP.text.upper()}&&{elemento.lbl_SP.text.upper()}&&{elemento.lbl_pista.text.upper()}\n')
             renglon.append('<fin>\n')
             txt_ronda_1 = ''.join(renglon)
             renglon = []
             for elemento in self.parent.editor_tabs.tab_ronda_2.content.hijo.elementos:
-                renglon.append(f'{elemento.lbl_PP.text}&&{elemento.lbl_SP.text}&&{elemento.lbl_pista.text}\n')
+                renglon.append(f'{elemento.lbl_PP.text.upper()}&&{elemento.lbl_SP.text.upper()}&&{elemento.lbl_pista.text.upper()}\n')
             renglon.append('<fin>\n')
             txt_ronda_2 = ''.join(renglon)
-            txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text}<t>\n{txt_ronda_2}\n'
+            txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel.upper()}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text.upper()}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text.upper()}<t>\n{txt_ronda_2}\n'
+            guardar_cambios_nivel(self.parent.titulo.nombre_nivel, txt_a_guardar)
             print(txt_a_guardar)
 
 class TabsEditor(TabbedPanel):
@@ -141,10 +142,10 @@ class TabsEditor(TabbedPanel):
         self.tab_width = (Window.width - 4) / 2
         self.do_default_tab = False
         self.tab_ronda_1 = TabbedPanelHeader(text=nivel[1])
-        self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[1]))
+        self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras(nivel[1]))
         self.add_widget(self.tab_ronda_1)
         self.tab_ronda_2 = TabbedPanelHeader(text=nivel[2], size_hint=(1, 1))
-        self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras('cr_files/niveles.txt',nivel[2]))
+        self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras(nivel[2]))
         self.add_widget(self.tab_ronda_2)
 
 class Scroller(ScrollView):
@@ -273,7 +274,7 @@ if __name__ == '__main__':
 
     nombre = 'mujeres'
     ruta_niveles = 'cr_files/niveles.txt'
-    lista_palabras = obtener_lista_palabras(ruta_niveles, nombre)
+    lista_palabras = obtener_lista_palabras(nombre, ruta_niveles)
     lista_niveles = obtener_lista_niveles(ruta_niveles)
     print(lista_niveles)
     print(lista_niveles[0])
