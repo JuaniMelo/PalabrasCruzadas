@@ -55,6 +55,7 @@ class TituloNivel(RelativeLayout):
     def __init__(self, nombre_nivel, **kwargs):
         super().__init__(**kwargs)
         self.size_hint=(1, .1)
+        self.nombre_nivel_original = nombre_nivel
         self.nombre_nivel = nombre_nivel
         self.init_layout()
 
@@ -92,6 +93,7 @@ class TituloNivel(RelativeLayout):
                 on_text_validate = self.confirmar_nombre
                 )            #, pos_hint={'center_x':.5, 'center_y':.5}
             self.add_widget(self.nombre_input, index=1)
+            self.nombre_input.focus = True
             self.nombre_input.select_all()
             self.lbl_nombre.opacity = 0
 
@@ -110,9 +112,9 @@ class BotonesEditor(BoxLayout):
         self.spacing=5
         self.size_hint=(1, None)
         self.height=40
-        btn_cancelar = Button(text='Cancelar', on_release=self.cancelar)
+        btn_cancelar = ButtonBlue(text='Cancelar', font_name=FUENTE, on_release=self.cancelar)
         self.add_widget(btn_cancelar)
-        btn_guardar = Button(text='Guardar',on_release=self.guardar)
+        btn_guardar = ButtonBlue(text='Guardar', font_name=FUENTE,on_release=self.guardar)
         self.add_widget(btn_guardar)
     
     def cancelar(self, instance):
@@ -133,7 +135,8 @@ class BotonesEditor(BoxLayout):
             renglon.append('<fin>\n')
             txt_ronda_2 = ''.join(renglon)
             txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel.upper()}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text.upper()}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text.upper()}<t>\n{txt_ronda_2}\n'
-            guardar_cambios_nivel(self.parent.titulo.nombre_nivel, txt_a_guardar)
+            guardar_cambios_nivel(self.parent.titulo.nombre_nivel_original, txt_a_guardar)
+            self.parent.titulo.nombre_nivel_original = self.parent.titulo.nombre_nivel.upper()
             print(txt_a_guardar)
 
 class TabsEditor(TabbedPanel):
@@ -281,7 +284,7 @@ if __name__ == '__main__':
 
     class MainApp(App):
         def build(self):
-            return EditorNiveles(nivel=lista_niveles[1])
+            return EditorNiveles(nivel=lista_niveles[3])
 
     MainApp().run()
 

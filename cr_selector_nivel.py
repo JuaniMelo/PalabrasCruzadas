@@ -17,7 +17,7 @@ class SelectorNivel(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         with self.canvas.before:
-            Rectangle(source='images/fondos/sCruzadas_azul.png', size_hint=(None, None), size=Window.size)
+            Rectangle(source='images/fondos/sCruzadas_menu.png', size_hint=(None, None), size=Window.size)
         self.lista_niveles = obtener_lista_niveles('cr_files/niveles.txt')
         self.init_layout()
         

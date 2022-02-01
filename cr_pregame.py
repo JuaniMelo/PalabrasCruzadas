@@ -16,23 +16,39 @@ Window.left = 200
 Window.top = 140
 
 Builder.load_string('''
-<BoxError>:
+<MiPopup>:
     BoxLayout:
         orientation: 'vertical'
         Label:
-            text: 'Nivel incompleto. Agregue contenido para jugar'
-        Button:
-            id : btn
+            id: popup_lbl
+            halign: 'center'
+        ButtonBlue:
+            id : btn_ok
+            size_hint: (.6, None)
+            height: 28
+            font_size: 12
+            pos_hint: {'center_x': .5, 'center_y': .5}
             text: 'Aceptar'
 ''')
 
 class MiPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.ids.btn.bind(on_release=self.btn_ok)
+        self.separator_color = (30/255, 60/255, 100/255, 1)
+        self.separator_height = 0
+        self.title = 'Nivel no disponible'
+        self.title = ''
+        self.background = 'images/fondos/errorFondo.png'
+        self.ids.popup_lbl.text = '\n\n\n\nNivel incompleto\nAgregue contenido\npara jugar'
+        self.ids.popup_lbl.color = (0, 0, 0, 1)
+        self.ids.popup_lbl.font_size = 12
+        self.size_hint = (None, None)
+        self.size = (150, 200)
+        self.pos_hint= {'center_x': .5, 'center_y': .5}
+        self.ids.btn_ok.bind(on_release=self.salir)
 
-    def btn_ok(self, instance):
-        self.parent.dismiss()
+    def salir(self, instance):
+        self.dismiss()
         #self.parent.parent.remove_widget(self.parent.parent.box_error)
         #print('FOO')
 
@@ -156,14 +172,14 @@ class crPregame(BoxLayout):
         elif self.nivel_elegido == self.opA:
             self.nivel_no_elegido = self.opB
             if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
-                self.parent.box_error = BoxError()
-                self.parent.add_widget(self.box_error)
+                self.box_error = MiPopup()
+                self.box_error.open()
                 return
         elif self.nivel_elegido == self.opB:
             self.nivel_no_elegido = self.opA
             if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
-                self.box_error = BoxError()
-                self.add_widget(self.box_error)
+                self.box_error = MiPopup()
+                self.box_error.open()
                 return
         self.parent.parent.parent.crear_juego(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
 
