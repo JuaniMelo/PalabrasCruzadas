@@ -63,15 +63,15 @@ class crPregame(BoxLayout):
     NARANJA_CLARO=(1, .5, 0, 1)
     BLANCO=(1, 1, 1, 1)
     NEGRO=(0, 0, 0, 1)
-    FUENTE = 'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
+    FUENTE = 'fonts/bebas_neue.ttf'
     FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
     NORMAL_TOGGLE = 'images/botones/btn_claro.png'                         #'images/fondo_no_resaltado.png'
     DOWN_TOGGLE = 'images/botones/btn_claro_selec.png'                           #'images/fondo_resaltado2.png'
 
     def __init__(self, nombre_nivel, opa_text, opb_text, **kwargs):
         super().__init__(**kwargs)
-        self.lista_a = ['Alista', 'A']
-        self.lista_b = ['Blista', 'B']
+        #self.lista_a = ['Alista', 'A']
+        #self.lista_b = ['Blista', 'B']
         self.nombre_nivel = nombre_nivel
         self.opA = opa_text
         self.opB = opb_text
@@ -82,9 +82,9 @@ class crPregame(BoxLayout):
             background_disabled_normal = 'images/botones/btn_oscuro.png', 
             bold = True, 
             text = nombre_nivel, 
-            color = self.NARANJA, 
-            outline_width= 4,
-            outline_color=self.AZUL_OSCURO,
+            color = self.NARANJA_CLARO, 
+            #outline_width= 4,
+            #outline_color=self.AZUL_OSCURO,
             font_name = 'fonts/bebas_neue.ttf',               #'fonts/bebas_neue.ttf'
             font_size = 40, 
             size_hint = (1, .2))
@@ -135,35 +135,23 @@ class crPregame(BoxLayout):
 
     def opA_estado(self, instance, algo):
         if self.opcion1.state == 'down':
-            self.lista_palabras = self.lista_a
+            #self.lista_palabras = self.lista_a
             self.nivel_elegido = self.opA
-            #self.opcion1.font_size = 25
-            #self.opcion1.font_name = self.FUENTE_BOLD
             self.opcion1.color = self.NARANJA_CLARO
-            #print(f'Nivel elegido: {self.opA}')
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            #self.opcion1.font_size = 25
-            #self.opcion1.font_name = self.FUENTE
             self.opcion1.color = self.NARANJA
-            #print('No hay un nivel elegido')
     
     def opB_estado(self, instance, algo):
         if self.opcion2.state == 'down':
-            self.lista_palabras = self.lista_b
+            #self.lista_palabras = self.lista_b
             self.nivel_elegido = self.opB
-            #self.opcion2.font_size = 25
-            #self.opcion2.font_name = self.FUENTE_BOLD
             self.opcion2.color = self.NARANJA_CLARO
-            #print(f'Nivel elegido: {self.opB}')
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            #self.opcion2.font_size = 25
-            #self.opcion2.font_name = self.FUENTE
             self.opcion2.color = self.NARANJA
-            #print('No hay un nivel elegido')
 
     def pasar_screen(self, instance):
     #Chequea que las listas de rondas no estén vacías

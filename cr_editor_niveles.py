@@ -13,6 +13,7 @@ from kivy.uix.stacklayout import StackLayout
 from kivy.uix.popup import Popup
 from kivy.graphics import *
 from functools import partial
+from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.lang import Builder
@@ -31,6 +32,7 @@ Builder.load_string('''
 
 <ConfirmacionPopup>:
     BoxLayout:
+        size_hint: (1, 1)
         ButtonBlue:
             id: no_eliminar
         ButtonOrange:
@@ -58,12 +60,11 @@ class ConfirmacionPopup(Popup):
         super().__init__(**kwargs)
         self.separator_height = 0
         self.title = '¿Está seguro que desea eliminar este nivel?\nSi lo hace no podrá recuperarlo'
-        self.background = 'images/fondos/errorFondo.png'
+        self.background = 'images/fondos/errorFondo2.png'
         self.size_hint = (None, None)
-        self.size = (200, 100)
+        self.size = (150, 200)
         self.pos_hint= {'center_x': .5, 'center_y': .5}
         self.ids.no_eliminar.bind(on_release=self.dismiss)
-        self.ids.eliminar.bind(on_release=self.parent.eliminar_nivel)
 
 class MiTextInput(TextInput):
     def on_focus(self, *args):
@@ -72,12 +73,11 @@ class MiTextInput(TextInput):
         else:
             self.on_text_validate()
 
-class MiTítulo(ImageLabel):
+class MiTitulo(ImageLabel):
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and touch.is_double_tap:
-            print('doble tap')
             self.editar_nombre()
-        return super(MiTítulo, self).on_touch_down(touch)
+        return super(MiTitulo, self).on_touch_down(touch)
 
     def editar_nombre(self):
         self.parent.parent.listo_para_guardar = False
@@ -160,10 +160,10 @@ class TituloNivel(RelativeLayout):
         self.init_layout()
 
     def init_layout(self):
-        self.btn_editar = ButtonBlue(text='X', bold=True, size_hint=(None, None), size=(20, 20), pos_hint={'right':.98, 'center_y':.5})
+        self.btn_editar = ButtonBlue(text='X', size_hint=(None, None), size=(25, 25),font_size=20, pos_hint={'right':.98, 'center_y':.5})
         self.btn_editar.bind(on_release=self.crear_popup)
         self.add_widget(self.btn_editar)
-        self.lbl_nombre = MiTítulo(source='images/botones/btn_oscuro.png',
+        self.lbl_nombre = MiTitulo(source='images/botones/btn_oscuro.png',
             text=self.nombre_nivel,
             size_hint=(1, 1),
             color=NARANJA_CLARO,
@@ -173,16 +173,22 @@ class TituloNivel(RelativeLayout):
         self.add_widget(self.lbl_nombre, index=1)
     
     def crear_popup(self, instance):
-        self.add_widget(ConfirmacionPopup().open)
-        #self.conf_box.open()
+        self.conf_popup = ConfirmacionPopup()
+        self.conf_popup.ids.eliminar.bind(on_release=self.apretar_eliminar_nivel)
+        self.conf_popup.open()
 
-    def eliminar_nivel(self, instance):
+    def apretar_eliminar_nivel(self, instance):
+        self.conf_popup.dismiss()
+        Clock.schedule_once(self.eliminar_nivel, .2)
+
+    def eliminar_nivel(self, dt):
+        eliminar_info_nivel(self.nombre_nivel_original)
+        self.parent.parent.parent.parent.scroll_menu.niveles = obtener_lista_niveles()
         for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
-            if boton.text == self.nombre_nivel:
+            if boton.text == self.nombre_nivel_original:
                 self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.remove_widget(boton)
                 self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones.remove(boton)
                 self.parent.parent.parent.parent.fondo_lado.clear_widgets()
-        eliminar_info_nivel(self.nombre_nivel)
 
 class BotonesEditor(BoxLayout):
     def __init__(self, **kwargs):
@@ -190,10 +196,10 @@ class BotonesEditor(BoxLayout):
         self.padding=5
         self.spacing=5
         self.size_hint=(1, None)
-        self.height=40
-        btn_cancelar = ButtonBlue(text='Cancelar', font_name=FUENTE, on_release=self.cancelar)
+        self.height=50
+        btn_cancelar = ButtonBlue(text='Cancelar', font_name=FUENTE, font_size=25, on_release=self.cancelar)
         self.add_widget(btn_cancelar)
-        btn_guardar = ButtonBlue(text='Guardar', font_name=FUENTE,on_release=self.guardar)
+        btn_guardar = ButtonBlue(text='Guardar', font_name=FUENTE, font_size=25,on_release=self.guardar)
         self.add_widget(btn_guardar)
     
     def cancelar(self, instance):
@@ -221,14 +227,13 @@ class BotonesEditor(BoxLayout):
             for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
                 if self.parent.titulo.nombre_nivel_original == boton.text:
                     boton.text = self.parent.titulo.nombre_nivel.upper()
-                print('ver')
         #CAMBIA EL NOMBRE DEL NIVEL ANTERIOR AL ACTUAL
             self.parent.titulo.nombre_nivel_original = self.parent.titulo.nombre_nivel.upper()
-            print(txt_a_guardar)
 
 class TabsEditor(TabbedPanel):
     BG_NORMAL = 'images/botones/btn2_orange_normal.png'
     BG_DOWN = 'images/botones/btn2_orange_down.png'
+    COLOR_FONDO = (198/255, 120/255, 37/255, 1)
 
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)

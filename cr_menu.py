@@ -68,7 +68,7 @@ class scMarco(BoxLayout):
         self.add_widget(self.scMenu)
         self.ingreso = BoxLayout(size_hint=(1, None), height=40, spacing=5, padding = (8, 0))
         self.add_widget(self.ingreso)
-        self.nivel_input = TextInput(multiline=False, hint_text='Añadir nivel')
+        self.nivel_input = TextInput(multiline=False, hint_text='Añadir nivel', on_text_validate=self.apretar_boton_agregar)
         self.ingreso.add_widget(self.nivel_input)
         self.agregar = ButtonBlue(text='+',font_size=30,size_hint=(None, None), size=(40, 40))
         self.agregar.bind(on_release=self.apretar_boton_agregar)
@@ -80,7 +80,11 @@ class scMarco(BoxLayout):
         elif self.nivel_input.text == '':
             return
         else:
-            nivel_a_crear = self.nivel_input.text
+            for nivel in self.niveles:
+                if nivel[0] == self.nivel_input.text.upper():
+                    self.nivel_input.text = ''
+                    return
+            nivel_a_crear = self.nivel_input.text.upper()
         self.nivel_input.text = ''
         guardar_nuevo_nivel(nivel_a_crear)
         self.niveles = obtener_lista_niveles()
