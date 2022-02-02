@@ -192,8 +192,9 @@ class crRonda(RelativeLayout):
 
 if __name__ == '__main__':
 
-    nombre_nivel = 'HOMBRES'
-    lista_palabras = obtener_lista_palabras(nombre_nivel)
+    nombre_nivel = 'HOMBRES Y MUJERES'
+    nombre_ronda = 'HOMBRES'
+    lista_palabras = obtener_lista_palabras(nombre_nivel, nombre_ronda)
 
     class JugarRonda(App):
         def build(self):

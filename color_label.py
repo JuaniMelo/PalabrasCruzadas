@@ -79,7 +79,7 @@ class ImageLabel(Label):
         super().__init__(**kwargs)
         self.source = source
 
-class ButtonOrange(HoverButton):
+class ButtonOrange(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.background_normal = 'images/botones/btn2_orange_normal.png'

@@ -171,13 +171,13 @@ class crPregame(BoxLayout):
             return
         elif self.nivel_elegido == self.opA:
             self.nivel_no_elegido = self.opB
-            if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
+            if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
                 self.box_error = MiPopup()
                 self.box_error.open()
                 return
         elif self.nivel_elegido == self.opB:
             self.nivel_no_elegido = self.opA
-            if len(obtener_lista_palabras(self.opA)) == 0 or len(obtener_lista_palabras(self.opB)) == 0:
+            if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
                 self.box_error = MiPopup()
                 self.box_error.open()
                 return

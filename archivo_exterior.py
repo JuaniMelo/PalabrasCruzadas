@@ -33,9 +33,12 @@ def obtener_lista_grupos(ruta='cr_files/niveles.txt'):
                 lista_grupos.append(renglon)
     return lista_grupos
 
-def obtener_lista_palabras(titulo, ruta='cr_files/niveles.txt'):
+def obtener_lista_palabras(nivel, titulo, ruta='cr_files/niveles.txt'):
     lista_palabras = []
     with open(ruta, 'r', encoding='utf-8') as f:
+        linea = f.readline()
+        while f'<n>{nivel}<n>\n' not in linea:
+            linea = f.readline()
         linea = f.readline()
         while linea != f'<t>{titulo.upper()}<t>\n':
             linea = f.readline()

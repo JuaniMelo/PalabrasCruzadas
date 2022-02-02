@@ -3,9 +3,9 @@ from color_label import *
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.relativelayout import RelativeLayout
 import archivo_exterior
+from cr_editor_niveles import *
 from cr_menu import *
 from cr_pregame import *
-from cr_registro import *
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 Window.size = (960, 540)
@@ -42,11 +42,12 @@ class SelectorNivel(Screen):
         self.fondo_lado.add_widget(self.selector_nivel)
 
     def crear_editor(self, nivel):
+        self.lista_niveles = obtener_lista_niveles('cr_files/niveles.txt')
         self.fondo_lado.clear_widgets()
         for lvl in self.lista_niveles:
             if lvl[0] == nivel:
                 nivel_elegido = lvl
-        self.editor_nivel = MainMenu(nivel_elegido)
+        self.editor_nivel = EditorNiveles(nivel_elegido)
         self.fondo_lado.add_widget(self.editor_nivel)
 
     def crear_juego(self, nivel, ronda1, ronda2):

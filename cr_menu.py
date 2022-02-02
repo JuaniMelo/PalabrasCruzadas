@@ -24,7 +24,6 @@ class crMenuNiveles(StackLayout):
         i = 0
         for nivel in self.niveles:
             self.botones.append(ButtonBlue(disabled_color=(1, 1, 1, 1),text=nivel[0], size_hint=(1, None),width=165, height=50, halign='left',valign='middle', font_name='fonts/bebas_neue.ttf', font_size=15))
-            print(self.botones[i].size)
             self.botones[i].text_size=self.botones[i].size
             self.add_widget(self.botones[i])
             self.botones[i].bind(on_press=self.apretar_boton)
@@ -33,6 +32,7 @@ class crMenuNiveles(StackLayout):
         self.bind(minimum_height = self.setter('height'))
 
     def apretar_boton(self, instance):
+        self.niveles = obtener_lista_niveles('cr_files/niveles.txt')
         for btn in self.botones:
             btn.background_normal = 'images/botones/btn2_blue_normal.png'
             btn.disabled = False
@@ -49,10 +49,10 @@ class crPregameMenu(ScrollView):
     def __init__(self, niveles, **kwargs):
         super(crPregameMenu, self).__init__(**kwargs)
         self.scroll_timeout = 0
-        niveles = crMenuNiveles(niveles)
-        niveles.size_hint = (1, None)
-        niveles.height = niveles.minimum_height
-        self.add_widget(niveles)
+        self.niveles = crMenuNiveles(niveles)
+        self.niveles.size_hint = (1, None)
+        self.niveles.height = self.niveles.minimum_height
+        self.add_widget(self.niveles)
 
 class scMarco(BoxLayout):
     def __init__(self, niveles, **kwargs):
@@ -83,14 +83,15 @@ class scMarco(BoxLayout):
             nivel_a_crear = self.nivel_input.text
         self.nivel_input.text = ''
         guardar_nuevo_nivel(nivel_a_crear)
+        self.niveles = obtener_lista_niveles()
         self.crear_nivel(nivel_a_crear)
     
     def crear_nivel(self, nombre_nivel):
-        self.niveles.append([nombre_nivel, 'PRIMERA RONDA', 'SEGUNDA RONDA'])
+        #self.niveles.append([nombre_nivel, 'PRIMERA RONDA', 'SEGUNDA RONDA'])
         self.remove_widget(self.scMenu)
         self.scMenu = crPregameMenu(self.niveles)
         self.add_widget(self.scMenu, index=1)
-        #FALTA Escribir el código para guardar en el archivo los cambios
+
 
 
 

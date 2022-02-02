@@ -1,4 +1,4 @@
-from archivo_exterior import obtener_lista_niveles, obtener_lista_palabras, guardar_cambios_nivel
+from archivo_exterior import obtener_lista_niveles, obtener_lista_palabras, guardar_cambios_nivel, eliminar_info_nivel
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.relativelayout import RelativeLayout
@@ -7,11 +7,12 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import Image
-from color_label import ButtonBlue, ColorLabel, ImageLabel, LabelLeft
+from color_label import ButtonBlue, ButtonOrange, ColorLabel, ImageLabel, LabelLeft
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.popup import Popup
 from kivy.graphics import *
+from functools import partial
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.lang import Builder
@@ -23,6 +24,20 @@ Builder.load_string('''
             text: 'hola'
         Label:
             text: 'chau'
+
+<TabbedPanelHeaderEditable>:
+    font_name: 'fonts/bebas_neue.ttf'
+    font_size: 25
+
+<ConfirmacionPopup>:
+    BoxLayout:
+        ButtonBlue:
+            id: no_eliminar
+        ButtonOrange:
+            id : eliminar
+            font_size: 12
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            text: 'Aceptar'
 ''')
 
 NARANJA=(190/255, 100/255, 0, 1)
@@ -37,6 +52,91 @@ BLANCO=(1, 1, 1, 1)
 NEGRO=(0, 0, 0, 1)
 FUENTE = 'fonts/bebas_neue.ttf'            #'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
 FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
+
+class ConfirmacionPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.separator_height = 0
+        self.title = '¿Está seguro que desea eliminar este nivel?\nSi lo hace no podrá recuperarlo'
+        self.background = 'images/fondos/errorFondo.png'
+        self.size_hint = (None, None)
+        self.size = (200, 100)
+        self.pos_hint= {'center_x': .5, 'center_y': .5}
+        self.ids.no_eliminar.bind(on_release=self.dismiss)
+        self.ids.eliminar.bind(on_release=self.parent.eliminar_nivel)
+
+class MiTextInput(TextInput):
+    def on_focus(self, *args):
+        if self.focus:
+            return       
+        else:
+            self.on_text_validate()
+
+class MiTítulo(ImageLabel):
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos) and touch.is_double_tap:
+            print('doble tap')
+            self.editar_nombre()
+        return super(MiTítulo, self).on_touch_down(touch)
+
+    def editar_nombre(self):
+        self.parent.parent.listo_para_guardar = False
+        self.parent.nombre_input = MiTextInput(background_color=(1, 1, 1, 0),
+            unfocus_on_touch=True,
+            halign='center',
+            text=self.parent.nombre_nivel,
+            multiline=False,
+            write_tab=False,
+            foreground_color=BLANCO,
+            font_name = 'fonts/bebas_neue.ttf',
+            font_size = 30,
+            on_text_validate = self.confirmar_nombre
+            )            #, pos_hint={'center_x':.5, 'center_y':.5}
+        self.parent.add_widget(self.parent.nombre_input, index=1)
+        self.parent.lbl_nombre.opacity = 0
+        self.parent.nombre_input.focus = True
+        self.parent.nombre_input.select_all()
+
+    def confirmar_nombre(self, instance):
+        nombre=instance.text
+        self.parent.lbl_nombre.text = nombre
+        self.parent.nombre_nivel = nombre
+        self.parent.lbl_nombre.opacity = 1
+        self.parent.parent.listo_para_guardar = True
+        self.parent.remove_widget(instance)
+
+class TabbedPanelHeaderEditable(TabbedPanelHeader):
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos) and touch.is_double_tap:
+            self.editable = True
+            self.editar_nombre()
+        return super(TabbedPanelHeaderEditable, self).on_touch_down(touch)
+
+    def editar_nombre(self):
+        self.parent.parent.listo_para_guardar = False
+        self.size_hint=(0, 1)
+        self.input = MiTextInput(background_color=(1, 1, 1, 0),
+            unfocus_on_touch=True,
+            text=self.text, 
+            halign='center',
+            multiline=False,
+            write_tab=False,
+            foreground_color=BLANCO,
+            font_name = 'fonts/bebas_neue.ttf',
+            font_size = 25,
+            on_text_validate = self.confirmar_nombre)
+        self.parent.add_widget(self.input, index=1)
+        self.input.focus = True
+        self.input.select_all()
+        self.opacity = 0
+    
+    def confirmar_nombre(self, instance):
+        nombre=instance.text.upper()
+        self.text = nombre
+        self.opacity = 1
+        self.parent.parent.listo_para_guardar = True
+        self.parent.remove_widget(instance)
+        self.size_hint = (1, 1)
 
 class EditorNiveles(BoxLayout):
     def __init__(self, nivel, **kwargs):
@@ -60,50 +160,29 @@ class TituloNivel(RelativeLayout):
         self.init_layout()
 
     def init_layout(self):
-        self.btn_editar = Button(text='X', size_hint=(None, None), size=(20, 20), pos_hint={'right':.98, 'center_y':.5})
-        self.btn_editar.bind(on_release=self.eliminar_nivel)
+        self.btn_editar = ButtonBlue(text='X', bold=True, size_hint=(None, None), size=(20, 20), pos_hint={'right':.98, 'center_y':.5})
+        self.btn_editar.bind(on_release=self.crear_popup)
         self.add_widget(self.btn_editar)
-        self.lbl_nombre = Button(background_normal='images/botones/btn_oscuro.png',
-            background_down='images/botones/btn_oscuro.png',
+        self.lbl_nombre = MiTítulo(source='images/botones/btn_oscuro.png',
             text=self.nombre_nivel,
             size_hint=(1, 1),
             color=NARANJA_CLARO,
             font_name = FUENTE,
-            font_size = 30,
-            on_release=self.editar_nombre
+            font_size = 30
             )            #, pos_hint={'center_x':.5, 'center_y':.5}
         self.add_widget(self.lbl_nombre, index=1)
     
+    def crear_popup(self, instance):
+        self.add_widget(ConfirmacionPopup().open)
+        #self.conf_box.open()
+
     def eliminar_nivel(self, instance):
-        if instance.text == 'X':
-            pass
-
-    def editar_nombre(self, instance):
-        if len(self.children) == 2:
-            self.parent.listo_para_guardar = False
-            self.nombre_input = TextInput(background_color=(1, 1, 1, 0),
-                halign='center',
-                text=self.nombre_nivel,
-                size_hint=(1, 1),
-                multiline=False,
-                write_tab=False,
-                foreground_color=BLANCO,
-                font_name = 'fonts/bebas_neue.ttf',
-                font_size = 30,
-                on_text_validate = self.confirmar_nombre
-                )            #, pos_hint={'center_x':.5, 'center_y':.5}
-            self.add_widget(self.nombre_input, index=1)
-            self.nombre_input.focus = True
-            self.nombre_input.select_all()
-            self.lbl_nombre.opacity = 0
-
-    def confirmar_nombre(self, instance):
-        nombre=instance.text
-        self.lbl_nombre.text = nombre
-        self.nombre_nivel = nombre
-        self.lbl_nombre.opacity = 1
-        self.parent.listo_para_guardar = True
-        self.remove_widget(instance)
+        for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
+            if boton.text == self.nombre_nivel:
+                self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.remove_widget(boton)
+                self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones.remove(boton)
+                self.parent.parent.parent.parent.fondo_lado.clear_widgets()
+        eliminar_info_nivel(self.nombre_nivel)
 
 class BotonesEditor(BoxLayout):
     def __init__(self, **kwargs):
@@ -124,6 +203,7 @@ class BotonesEditor(BoxLayout):
 
     def guardar(self, instance):
         if self.parent.listo_para_guardar:
+        #ARMA EL TEXTO A GUARDAR
             renglon = []
             for elemento in self.parent.editor_tabs.tab_ronda_1.content.hijo.elementos:
                 renglon.append(f'{elemento.lbl_PP.text.upper()}&&{elemento.lbl_SP.text.upper()}&&{elemento.lbl_pista.text.upper()}\n')
@@ -135,20 +215,30 @@ class BotonesEditor(BoxLayout):
             renglon.append('<fin>\n')
             txt_ronda_2 = ''.join(renglon)
             txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel.upper()}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text.upper()}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text.upper()}<t>\n{txt_ronda_2}\n'
+        #GUARDA EL TEXTO GENERADO
             guardar_cambios_nivel(self.parent.titulo.nombre_nivel_original, txt_a_guardar)
+        #CAMBIA EL NOMBRE DEL SELECTOR DE NIVELES
+            for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
+                if self.parent.titulo.nombre_nivel_original == boton.text:
+                    boton.text = self.parent.titulo.nombre_nivel.upper()
+                print('ver')
+        #CAMBIA EL NOMBRE DEL NIVEL ANTERIOR AL ACTUAL
             self.parent.titulo.nombre_nivel_original = self.parent.titulo.nombre_nivel.upper()
             print(txt_a_guardar)
 
 class TabsEditor(TabbedPanel):
+    BG_NORMAL = 'images/botones/btn2_orange_normal.png'
+    BG_DOWN = 'images/botones/btn2_orange_down.png'
+
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)
-        self.tab_width = (Window.width - 4) / 2
+        self.tab_width = self.width * 4 - 22
         self.do_default_tab = False
-        self.tab_ronda_1 = TabbedPanelHeader(text=nivel[1])
-        self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras(nivel[1]))
+        self.tab_ronda_1 = TabbedPanelHeaderEditable(text=nivel[1], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN)
+        self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras(nivel[0],nivel[1]))
         self.add_widget(self.tab_ronda_1)
-        self.tab_ronda_2 = TabbedPanelHeader(text=nivel[2], size_hint=(1, 1))
-        self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras(nivel[2]))
+        self.tab_ronda_2 = TabbedPanelHeaderEditable(text=nivel[2], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN)
+        self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras(nivel[0],nivel[2]))
         self.add_widget(self.tab_ronda_2)
 
 class Scroller(ScrollView):
@@ -182,7 +272,7 @@ class ListBox(StackLayout):
         self.enter_register.add_widget(self.enter_register.SP_input)
         self.enter_register.pista_input = TextInput(font_name=self.font, font_size=self.ALT_FUENTE,write_tab = False)
         self.enter_register.add_widget(self.enter_register.pista_input)
-        self.enter_register.agregar = Button(text='Añadir', size_hint=(None,1), width=100, font_name=self.FUENTE, font_size=self.ALT_FUENTE)
+        self.enter_register.agregar = ButtonBlue(text='Añadir', size_hint=(None,1), width=100, font_name=self.FUENTE, font_size=self.ALT_FUENTE)
         self.enter_register.agregar.bind(on_release=self.agregar_entrada)
         self.enter_register.add_widget(self.enter_register.agregar)
         self.add_widget(self.enter_register)
@@ -212,10 +302,10 @@ class ListBox(StackLayout):
         self.elementos[i].add_widget(self.elementos[i].lbl_SP)
         self.elementos[i].lbl_pista = LabelLeft(text=textPista, halign = 'left', valign = 'middle',  font_name=self.FUENTE, font_size=self.ALT_FUENTE)
         self.elementos[i].add_widget(self.elementos[i].lbl_pista)
-        self.elementos[i].editar = Button(text='Editar', font_size=self.ALT_FUENTE, size_hint=(None, None), size=(60, 35), font_name=self.FUENTE)
+        self.elementos[i].editar = ButtonBlue(text='Editar', font_size=self.ALT_FUENTE, size_hint=(None, None), size=(60, 35), font_name=self.FUENTE)
         self.elementos[i].editar.bind(on_release=self.editar_elemento)
         self.elementos[i].add_widget(self.elementos[i].editar)
-        self.elementos[i].borrar = Button(text='X', size_hint=(None, None), size=(35, 35), font_size=self.ALT_FUENTE, font_name=self.FUENTE)
+        self.elementos[i].borrar = ButtonBlue(text='X', size_hint=(None, None), size=(35, 35), font_size=self.ALT_FUENTE, font_name=self.FUENTE)
         self.elementos[i].borrar.bind(on_release=self.eliminar_elemento)
         self.elementos[i].add_widget(self.elementos[i].borrar)
 
@@ -275,16 +365,14 @@ if __name__ == '__main__':
     Window.left = 200
     Window.top = 140
 
-    nombre = 'mujeres'
     ruta_niveles = 'cr_files/niveles.txt'
-    lista_palabras = obtener_lista_palabras(nombre, ruta_niveles)
     lista_niveles = obtener_lista_niveles(ruta_niveles)
     print(lista_niveles)
     print(lista_niveles[0])
 
     class MainApp(App):
         def build(self):
-            return EditorNiveles(nivel=lista_niveles[3])
+            return EditorNiveles(nivel=lista_niveles[5])
 
     MainApp().run()
 
