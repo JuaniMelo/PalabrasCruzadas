@@ -46,6 +46,6 @@ if __name__ == '__main__':
     class MiApp(App):
         def build(self):
             lista_niveles = obtener_lista_niveles('cr_files/niveles.txt')
-            return Juego(lista_niveles[0][0], lista_niveles[0][1], lista_niveles[0][2])
+            return Juego(lista_niveles[2][0], lista_niveles[2][1], lista_niveles[2][2])
 
     MiApp().run()

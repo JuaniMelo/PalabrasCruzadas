@@ -55,6 +55,11 @@ NEGRO=(0, 0, 0, 1)
 FUENTE = 'fonts/bebas_neue.ttf'            #'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
 FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
 
+class SelfValidateTextInput(TextInput):
+    def on_focus(self, instance, value):
+        if not value:   # SIN FOCUS
+            print('Se salió el focus')
+
 class ConfirmacionPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -66,13 +71,6 @@ class ConfirmacionPopup(Popup):
         self.pos_hint= {'center_x': .5, 'center_y': .5}
         self.ids.no_eliminar.bind(on_release=self.dismiss)
 
-class MiTextInput(TextInput):
-    def on_focus(self, *args):
-        if self.focus:
-            return       
-        else:
-            self.on_text_validate()
-
 class MiTitulo(ImageLabel):
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and touch.is_double_tap:
@@ -81,8 +79,7 @@ class MiTitulo(ImageLabel):
 
     def editar_nombre(self):
         self.parent.parent.listo_para_guardar = False
-        self.parent.nombre_input = MiTextInput(background_color=(1, 1, 1, 0),
-            unfocus_on_touch=True,
+        self.parent.nombre_input = SelfValidateTextInput(background_color=(1, 1, 1, 0),
             halign='center',
             text=self.parent.nombre_nivel,
             multiline=False,
@@ -92,10 +89,15 @@ class MiTitulo(ImageLabel):
             font_size = 30,
             on_text_validate = self.confirmar_nombre
             )            #, pos_hint={'center_x':.5, 'center_y':.5}
+        self.parent.nombre_input.bind(on_focus=self.confirmar_nombre)
         self.parent.add_widget(self.parent.nombre_input, index=1)
         self.parent.lbl_nombre.opacity = 0
+        Clock.schedule_once(self.esperar, .15)
+
+    def esperar(self, dt):
         self.parent.nombre_input.focus = True
         self.parent.nombre_input.select_all()
+        self.parent.nombre_input.unfocus_on_touch=True
 
     def confirmar_nombre(self, instance):
         nombre=instance.text
@@ -115,8 +117,7 @@ class TabbedPanelHeaderEditable(TabbedPanelHeader):
     def editar_nombre(self):
         self.parent.parent.listo_para_guardar = False
         self.size_hint=(0, 1)
-        self.input = MiTextInput(background_color=(1, 1, 1, 0),
-            unfocus_on_touch=True,
+        self.input = SelfValidateTextInput(background_color=(1, 1, 1, 0),
             text=self.text, 
             halign='center',
             multiline=False,
@@ -126,10 +127,14 @@ class TabbedPanelHeaderEditable(TabbedPanelHeader):
             font_size = 25,
             on_text_validate = self.confirmar_nombre)
         self.parent.add_widget(self.input, index=1)
+        self.opacity = 0
+        Clock.schedule_once(self.esperar, .15)
+    
+    def esperar(self, dt):
         self.input.focus = True
         self.input.select_all()
-        self.opacity = 0
-    
+        self.input.unfocus_on_touch=True
+
     def confirmar_nombre(self, instance):
         nombre=instance.text.upper()
         self.text = nombre
