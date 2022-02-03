@@ -182,6 +182,7 @@ class TituloNivel(RelativeLayout):
         Clock.schedule_once(self.eliminar_nivel, .2)
 
     def eliminar_nivel(self, dt):
+        self.parent.parent.parent.parent.source = 'images/fondos/sCruzadas_menu.png'
         eliminar_info_nivel(self.nombre_nivel_original)
         self.parent.parent.parent.parent.scroll_menu.niveles = obtener_lista_niveles()
         for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
@@ -221,7 +222,7 @@ class BotonesEditor(BoxLayout):
             renglon.append('<fin>\n')
             txt_ronda_2 = ''.join(renglon)
             txt_a_guardar = f'<n>{self.parent.titulo.nombre_nivel.upper()}<n>\n<t>{self.parent.editor_tabs.tab_ronda_1.text.upper()}<t>\n{txt_ronda_1}<t>{self.parent.editor_tabs.tab_ronda_2.text.upper()}<t>\n{txt_ronda_2}\n'
-        #GUARDA EL TEXTO GENERADO
+        #GUARDA EL TEXTO GENERADO EN EL ARCHIVO TXT
             guardar_cambios_nivel(self.parent.titulo.nombre_nivel_original, txt_a_guardar)
         #CAMBIA EL NOMBRE DEL SELECTOR DE NIVELES
             for boton in self.parent.parent.parent.parent.scroll_menu.scMenu.niveles.botones:
@@ -237,12 +238,13 @@ class TabsEditor(TabbedPanel):
 
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)
-        self.tab_width = self.width * 4 - 22
+        self.tab_width = self.width * 4 - 26
         self.do_default_tab = False
-        self.tab_ronda_1 = TabbedPanelHeaderEditable(text=nivel[1], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN)
+        self.background_color = (0, 0, 0, 0)
+        self.tab_ronda_1 = TabbedPanelHeaderEditable(text=nivel[1], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN, size_hint=(.95, 1))
         self.tab_ronda_1.content = Scroller(lista=obtener_lista_palabras(nivel[0],nivel[1]))
         self.add_widget(self.tab_ronda_1)
-        self.tab_ronda_2 = TabbedPanelHeaderEditable(text=nivel[2], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN)
+        self.tab_ronda_2 = TabbedPanelHeaderEditable(text=nivel[2], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN, size_hint=(.95, 1))
         self.tab_ronda_2.content = Scroller(lista=obtener_lista_palabras(nivel[0],nivel[2]))
         self.add_widget(self.tab_ronda_2)
 

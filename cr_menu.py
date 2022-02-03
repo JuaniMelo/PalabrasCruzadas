@@ -33,6 +33,7 @@ class crMenuNiveles(StackLayout):
 
     def apretar_boton(self, instance):
         self.niveles = obtener_lista_niveles('cr_files/niveles.txt')
+        self.parent.parent.parent.parent.source = 'images/fondos/sCruzadas_menu.png'
         for btn in self.botones:
             btn.background_normal = 'images/botones/btn2_blue_normal.png'
             btn.disabled = False

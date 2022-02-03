@@ -8,16 +8,25 @@ from cr_menu import *
 from cr_pregame import *
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
+from kivy.lang import Builder
 Window.size = (960, 540)
 Window.borderless = False
 Window.left = 100
 Window.top = 140
 
+Builder.load_string('''
+<SelectorNivel>:
+    source : self.source
+    canvas.before:
+        Rectangle:
+            source: self.source
+            size: root.size
+''')
+
 class SelectorNivel(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        with self.canvas.before:
-            Rectangle(source='images/fondos/sCruzadas_menu.png', size_hint=(None, None), size=Window.size)
+        self.source = 'images/fondos/sCruzadas_menu.png'
         self.lista_niveles = obtener_lista_niveles('cr_files/niveles.txt')
         self.init_layout()
         
@@ -26,7 +35,7 @@ class SelectorNivel(Screen):
         self.add_widget(self.main_layout)
         self.scroll_menu=scMarco(self.lista_niveles, size_hint=(None, 1), width=200)
         self.main_layout.add_widget(self.scroll_menu)
-        self.fondo_lado = BgImage(source='images/fondos/sCruzadas_menu.png')
+        self.fondo_lado = BgImage(source='images/fondos/sCruzadas_azul.png')
         self.main_layout.add_widget(self.fondo_lado)
         self.reset_fondo_lado()
 

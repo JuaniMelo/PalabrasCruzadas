@@ -170,6 +170,7 @@ class crPregame(BoxLayout):
         self.parent.parent.parent.crear_juego(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
 
     def ver_lista(self, instance):
+        self.parent.parent.parent.source = 'images/fondos/sCruzadas_azul.png'
         self.parent.parent.parent.crear_editor(self.nombre_nivel)
 
 if __name__ == '__main__':
