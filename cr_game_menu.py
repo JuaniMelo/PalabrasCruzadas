@@ -40,7 +40,7 @@ class crGameMenuInicial(BoxLayout):
         self.padding = 10
         self.layout_central = BoxLayout(size_hint=(1, .5), orientation='vertical', padding=(0, 240, 0, 0))
         self.add_widget(self.layout_central)
-        self.lbl_nivel=Label(text=nombre_ronda, font_name=self.FUENTE, font_size=25)
+        self.lbl_nivel=Label(text=nombre_ronda, font_name=self.FUENTE, font_size=40)
         self.layout_central.add_widget(self.lbl_nivel)
     #Arma los botones de JUGAR y SIGUIENTE
         self.btn_jugar=ButtonOrange(text='JUGAR', size_hint=(1, .05), font_name=self.FUENTE, font_size=25, padding=(10, 10))
@@ -109,15 +109,13 @@ class crGameMenuFinal(BoxLayout):
                 print('foo')
 
     def obtener_aciertos(self):
-        palabras_acertadas = []
-        palabras_no_acertadas = []
-        i = 0
-        for acierto in self.lista_aciertos:
+        palabras_acertadas, palabras_no_acertadas = [], []
+        for i, acierto in enumerate(self.lista_aciertos):
+            palabra = self.parent.lista_palabras[i][0] + self.parent.lista_palabras[i][1]
             if acierto:
-                palabras_acertadas.append(self.parent.lista_palabras[i][0] + self.parent.lista_palabras[i][1])
+                palabras_acertadas.append(palabra)
             else:
-                palabras_no_acertadas.append(self.parent.lista_palabras[i][0] + self.parent.lista_palabras[i][1])
-            i +=1
+                palabras_no_acertadas.append(palabra)
         return palabras_acertadas, palabras_no_acertadas
 
     def apretar_boton_siguiente(self, instance):
@@ -130,6 +128,14 @@ class crGameMenuFinal(BoxLayout):
         self.agregar_acierto(i)
 
     def agregar_acierto(self, i):
+        self.lbl_acertadas.append(ColorLabel(text=self.palabras_acertadas[i], color=self.VERDE, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE))
+        self.aciertos.add_widget(self.lbl_acertadas[i])
+
+    def agregar_error(self, i):
+        self.lbl_no_acertadas.append(ColorLabel(text=self.palabras_no_acertadas[i], color=self.ROJO, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE))
+        self.errores.add_widget(self.lbl_no_acertadas[i])
+
+    '''def agregar_acierto(self, i):
         self.lbl_acertadas.append('')
         self.lbl_acertadas[i] = ColorLabel(text=self.palabras_acertadas[i], color=self.VERDE, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE)
         self.aciertos.add_widget(self.lbl_acertadas[i])
@@ -138,7 +144,7 @@ class crGameMenuFinal(BoxLayout):
     def agregar_error(self, i):
         self.lbl_no_acertadas.append('')
         self.lbl_no_acertadas[i] = ColorLabel(text=self.palabras_no_acertadas[i], color=self.ROJO, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE)
-        self.errores.add_widget(self.lbl_no_acertadas[i])
+        self.errores.add_widget(self.lbl_no_acertadas[i])'''
 
     def animar_lbl(self, i, instance):
         anim = Animation()

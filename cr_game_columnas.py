@@ -24,7 +24,7 @@ class Columnas(BoxLayout):
             self.boxPP.add_widget(self.lblPP[i])
         self.add_widget(self.boxPP)
     #TEMPORIZADOR
-        self.temp = Label(font_size='50dp', halign='center')        #, font_name='fonts/Lcd.ttf'
+        self.temp = Label(font_size=60, halign='center', font_name='fonts/Lcd.ttf')        #, font_name='fonts/Lcd.ttf'
         self.add_widget(self.temp)
     #BOX SP
         self.boxSP = BoxLayout(orientation='vertical',size_hint=(.8, 1), spacing=10, padding=(40,10))
@@ -39,21 +39,21 @@ class Columnas(BoxLayout):
         for i in range(len(self.lista_palabras)):
             self.lista_mezclada_PP.append(self.lista_palabras[i][0])
             self.lista_mezclada_SP.append(self.lista_palabras[i][1])
-        self.lista_mezclada_PP, self.lista_mezclada_SP = self.chequear_listas(self.lista_mezclada_PP, self.lista_mezclada_SP)
+        self.lista_mezclada_PP, self.lista_mezclada_SP = self.mezclar_listas(self.lista_mezclada_PP, self.lista_mezclada_SP)
     
-    def chequear_listas(self, lista1, lista2):          #Chequea que estén mezcladas
-        x = []
+    def mezclar_listas(self, lista1, lista2):          #Chequea que estén mezcladas
+        mezclados = []
         lista_control = []
         for i in range(len(lista1)):
-            x.append(lista1[i] + lista2[i])
+            mezclados.append(lista1[i] + lista2[i])
         for i in range(len(self.lista_palabras)):
             lista_control.append(self.lista_palabras[i][0] + self.lista_palabras[i][1])
-        while any(palabra in lista_control for palabra in x):
+        while any(palabra in lista_control for palabra in mezclados):
             random.shuffle(lista1)
             random.shuffle(lista2)
-            x = []
+            mezclados = []
             for i in range(len(lista1)):
-                x.append(lista1[i] + lista2[i])
+                mezclados.append(lista1[i] + lista2[i])
         return lista1, lista2
 
 if __name__ == '__main__': 

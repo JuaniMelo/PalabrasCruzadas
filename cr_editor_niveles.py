@@ -271,11 +271,11 @@ class ListBox(StackLayout):
             self.add_widget(self.elementos[i])
     #CREAR INPUT
         self.enter_register = BoxLayout(padding=[5], spacing=5, size_hint=(1, None), height=40)
-        self.enter_register.PP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
+        self.enter_register.PP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False, on_text_validate=self.agregar_entrada)
         self.enter_register.add_widget(self.enter_register.PP_input)
-        self.enter_register.SP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE,write_tab = False)
+        self.enter_register.SP_input = TextInput(multiline=False, halign='center', size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE,write_tab = False, on_text_validate=self.agregar_entrada)
         self.enter_register.add_widget(self.enter_register.SP_input)
-        self.enter_register.pista_input = TextInput(font_name=self.font, font_size=self.ALT_FUENTE,write_tab = False)
+        self.enter_register.pista_input = TextInput(multiline=False, font_name=self.font, font_size=self.ALT_FUENTE,write_tab = False, on_text_validate=self.agregar_entrada)
         self.enter_register.add_widget(self.enter_register.pista_input)
         self.enter_register.agregar = ButtonBlue(text='Añadir', size_hint=(None,1), width=100, font_name=self.FUENTE, font_size=self.ALT_FUENTE)
         self.enter_register.agregar.bind(on_release=self.agregar_entrada)
@@ -287,10 +287,8 @@ class ListBox(StackLayout):
     def agregar_entrada(self, instance):
         PP = self.enter_register.PP_input.text.upper()
         SP = self.enter_register.SP_input.text.upper()
-        pista = self.enter_register.pista_input.text
-        if PP == '' or SP == '' or pista == '':
-            pass
-        else:
+        pista = self.enter_register.pista_input.text.upper()
+        if PP != '' and SP != '' and pista != '':
             i = len(self.elementos)
             self.crear_elemento(i, PP, SP, pista)
             self.add_widget(self.elementos[i], index=1)
@@ -339,31 +337,33 @@ class ListBox(StackLayout):
             elemento.remove_widget(elemento.lbl_SP)
             elemento.remove_widget(elemento.lbl_pista)
         #Crea los inputs
-            elemento.PP_input = TextInput(multiline=False, halign='center', text=PP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
+            elemento.PP_input = TextInput(multiline=False, halign='center', text=PP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False, on_text_validate=self.editar_elemento)
             elemento.add_widget(elemento.PP_input, index = 2)
-            elemento.SP_input = TextInput(multiline=False, halign='center', text=SP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
+            elemento.SP_input = TextInput(multiline=False, halign='center', text=SP_text, size_hint=(0.1,1), font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False, on_text_validate=self.editar_elemento)
             elemento.add_widget(elemento.SP_input, index = 2)
-            elemento.pista_input = TextInput(multiline=False, size_hint=(1,1), text=pista_text, font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False)
+            elemento.pista_input = TextInput(multiline=False, size_hint=(1,1), text=pista_text, font_name=self.FUENTE, font_size=self.ALT_FUENTE, write_tab = False, on_text_validate=self.editar_elemento)
             elemento.add_widget(elemento.pista_input, index = 2)
-        elif instance.text == 'Aceptar' and self.editando == True:
-            self.parent.parent.parent.parent.listo_para_guardar = True
-            instance.text = 'Editar'
-            self.editando = False
+        elif instance.parent.editar.text == 'Aceptar' and self.editando == True:
         #Salva el texto
             PP_text = elemento.PP_input.text
             SP_text = elemento.SP_input.text
             pista_text = elemento.pista_input.text
-        #Elimina los inputs
-            elemento.remove_widget(elemento.PP_input)
-            elemento.remove_widget(elemento.SP_input)
-            elemento.remove_widget(elemento.pista_input)
-        #Crea los labels
-            elemento.lbl_PP.text = PP_text.upper()
-            elemento.lbl_SP.text = SP_text.upper()
-            elemento.lbl_pista.text = pista_text
-            elemento.add_widget(elemento.lbl_PP, index = 2)
-            elemento.add_widget(elemento.lbl_SP, index = 2)
-            elemento.add_widget(elemento.lbl_pista, index = 2)
+        #Prueba si hay espacios vacíos
+            if PP_text != '' and SP_text != '' and pista_text != '':
+                self.parent.parent.parent.parent.listo_para_guardar = True
+                instance.parent.editar.text = 'Editar'
+                self.editando = False
+            #Elimina los inputs
+                elemento.remove_widget(elemento.PP_input)
+                elemento.remove_widget(elemento.SP_input)
+                elemento.remove_widget(elemento.pista_input)
+            #Crea los labels
+                elemento.lbl_PP.text = PP_text.upper()
+                elemento.lbl_SP.text = SP_text.upper()
+                elemento.lbl_pista.text = pista_text
+                elemento.add_widget(elemento.lbl_PP, index = 2)
+                elemento.add_widget(elemento.lbl_SP, index = 2)
+                elemento.add_widget(elemento.lbl_pista, index = 2)
 
 if __name__ == '__main__':
     Window.size = (860, 540)

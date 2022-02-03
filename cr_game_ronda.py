@@ -48,7 +48,7 @@ class crRonda(RelativeLayout):
 #INICIALIZADORES
     def __init__(self, nombre_nivel, lista, **kwargs):
         super().__init__(**kwargs)
-        self.estado_juego = False
+        self.juego_activo = False
         self.source = 'images/fondos/fondo_azul.png'
         self.size_hint = (1, 1)
         self.nivel = nombre_nivel
@@ -79,9 +79,7 @@ class crRonda(RelativeLayout):
         self.botones.add_widget(self.btn_correcto)
 
     def init_aciertos(self):
-        self.aciertos = []
-        for elemento in self.lista_palabras:
-            self.aciertos.append(False)
+        self.aciertos = [False] * len(self.lista_palabras)
 
     def init_menu(self):
         self.btn_pasar.disabled = True
@@ -96,14 +94,14 @@ class crRonda(RelativeLayout):
 #LOGICA
 
     def comenzar_ronda(self):
-        self.estado_juego = True
+        self.juego_activo = True
         self.nueva_lista()
         self.remove_widget(self.menu)
         self.btn_pasar.disabled = False
         self.btn_correcto.disabled = False
 
     def terminar_ronda(self):
-        self.estado_juego = False
+        self.juego_activo = False
         self.menu = crGameMenuFinal(self.nivel, self.aciertos)
         self.add_widget(self.menu)
         Clock.schedule_once(self.wait, 3)
@@ -113,6 +111,23 @@ class crRonda(RelativeLayout):
 
     def siguiente_ronda(self):
         self.parent.siguiente_ronda()               #PROGRAMAR ESTO EN LA SCREEN VIEW
+
+    '''def obtener_pista(self, i):
+        texto = self.lista_palabras[i][2]
+        if len(texto) <= self.LONG_PARRAFO_PISTA:
+            self.pista = texto
+        else:
+            renglones = []
+            aux = ''
+            for word in texto.split(' '):
+                if len(aux) > self.LONG_PARRAFO_PISTA:
+                    renglones.append(aux)
+                    aux = ''
+                aux += f'{word} '
+            if renglones[-1] < aux:
+                renglones.append(aux)
+            self.pista = '\n'.join(renglones)
+        self.lbl_pista.text = self.pista'''
 
     def obtener_pista(self, i):
         if len(self.lista_palabras[i][2]) < self.LONG_PARRAFO_PISTA:
@@ -186,7 +201,7 @@ class crRonda(RelativeLayout):
             self.terminar_ronda()
 
     def actualizar(self, dt):
-        if self.estado_juego:
+        if self.juego_activo:
             self.actualizar_tiempo()
 
 

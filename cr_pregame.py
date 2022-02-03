@@ -20,7 +20,7 @@ Builder.load_string('''
     BoxLayout:
         orientation: 'vertical'
         Label:
-            id: popup_lbl
+            id: popup_label
             halign: 'center'
         ButtonBlue:
             id : btn_ok
@@ -39,9 +39,9 @@ class MiPopup(Popup):
         self.title = 'Nivel no disponible'
         self.title = ''
         self.background = 'images/fondos/errorFondo.png'
-        self.ids.popup_lbl.text = '\n\n\n\nNivel incompleto\nAgregue contenido\npara jugar'
-        self.ids.popup_lbl.color = (0, 0, 0, 1)
-        self.ids.popup_lbl.font_size = 12
+        self.ids.popup_label.text = '\n\n\n\nNivel incompleto\nAgregue contenido\npara jugar'
+        self.ids.popup_label.color = (0, 0, 0, 1)
+        self.ids.popup_label.font_size = 12
         self.size_hint = (None, None)
         self.size = (150, 200)
         self.pos_hint= {'center_x': .5, 'center_y': .5}
@@ -122,36 +122,34 @@ class crPregame(BoxLayout):
         self.add_widget(Label(size_hint=(1, .03)))
     #BOTONES
         botones = BoxLayout(size_hint=(1, .1), spacing=30, padding=(30, 0))
-        btn_ver = ButtonOrange(text='EDITAR', font_name='fonts/bebas_neue.ttf', font_size=25)
-        btn_ver.bind(on_release=self.ver_lista)
-        botones.add_widget(btn_ver)
-        btn_jugar = ButtonOrange(text='JUGAR', font_name='fonts/bebas_neue.ttf', font_size=25)        
-        btn_jugar.bind(on_release=self.pasar_screen)
-        botones.add_widget(btn_jugar)
+        boton_ver = ButtonOrange(text='EDITAR', font_name='fonts/bebas_neue.ttf', font_size=25)
+        boton_ver.bind(on_release=self.ver_lista)
+        botones.add_widget(boton_ver)
+        boton_jugar = ButtonOrange(text='JUGAR', font_name='fonts/bebas_neue.ttf', font_size=25)        
+        boton_jugar.bind(on_release=self.pasar_screen)
+        botones.add_widget(boton_jugar)
         self.add_widget(botones)
         espacio2 = Label(text='', size_hint=(1, .05))
     #SEPARADOR
         self.add_widget(Label(size_hint=(1, .05)))
 
     def opA_estado(self, instance, algo):
-        if self.opcion1.state == 'down':
-            #self.lista_palabras = self.lista_a
+        if instance.state == 'down':
             self.nivel_elegido = self.opA
-            self.opcion1.color = self.NARANJA_CLARO
+            instance.color = self.NARANJA_CLARO
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion1.color = self.NARANJA
+            instance.color = self.NARANJA
     
     def opB_estado(self, instance, algo):
-        if self.opcion2.state == 'down':
-            #self.lista_palabras = self.lista_b
+        if instance.state == 'down':
             self.nivel_elegido = self.opB
-            self.opcion2.color = self.NARANJA_CLARO
+            instance.color = self.NARANJA_CLARO
         else:
             self.lista_palabras = ['']
             self.nivel_elegido = ''
-            self.opcion2.color = self.NARANJA
+            instance.color = self.NARANJA
 
     def pasar_screen(self, instance):
     #Chequea que las listas de rondas no estén vacías
