@@ -23,14 +23,22 @@ class MainLayout(GridLayout):
         self.top_label = Label(text = 'No text')
         self.add_widget(self.top_label)
         self.top_input = MyTextInput(on_text_validate=self.change_top_label)
-        self.top_input.bind(on_focus=self.top_input.on_text_validate)
+        self.top_input.bind(focus=self.unfocus_top)
         self.add_widget(self.top_input)
     #Second row
-        self.bottom_label = Label(text='Bottom Label')
+        self.bottom_label = Label(text='Title of the Pop Up:')
         self.add_widget(self.bottom_label)
         self.bottom_input = MyTextInput(on_text_validate=self.create_popup)
-        self.bottom_input.bind(on_focus=self.bottom_input.on_text_validate)
+        self.bottom_input.bind(focus=self.unfocus_bottom)
         self.add_widget(self.bottom_input)
+
+    def unfocus_top(self, instance, value):
+        if not value:   # DEFOCUSED
+            self.change_top_label(instance)
+
+    def unfocus_bottom(self, instance, value):
+        if not value:   # DEFOCUSED
+            self.create_popup(instance)
 
     def change_top_label(self, instance):
         self.top_label.text = instance.text

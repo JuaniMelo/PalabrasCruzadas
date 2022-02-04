@@ -31,15 +31,20 @@ Builder.load_string('''
     font_size: 25
 
 <ConfirmacionPopup>:
+    title_color: (0, 0, 0, 1)
+    title_font: 'fonts/bebas_neue.ttf'
+    title_size: 18
     BoxLayout:
-        size_hint: (1, 1)
+        size_hint: (1, .7)
+        spacing: 5
         ButtonBlue:
             id: no_eliminar
+            text: 'Cancelar'
+            font_name: 'fonts/bebas_neue.ttf'
         ButtonOrange:
             id : eliminar
-            font_size: 12
-            pos_hint: {'center_x': .5, 'center_y': .5}
             text: 'Aceptar'
+            font_name: 'fonts/bebas_neue.ttf'
 ''')
 
 NARANJA=(190/255, 100/255, 0, 1)
@@ -55,19 +60,14 @@ NEGRO=(0, 0, 0, 1)
 FUENTE = 'fonts/bebas_neue.ttf'            #'fonts/merriweather-sans/MerriweatherSans-Bold.ttf'
 FUENTE_BOLD = 'fonts/merriweather-sans/MerriweatherSans-ExtraBold.ttf'
 
-class SelfValidateTextInput(TextInput):
-    def on_focus(self, instance, value):
-        if not value:   # SIN FOCUS
-            print('Se salió el focus')
-
 class ConfirmacionPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.separator_height = 0
-        self.title = '¿Está seguro que desea eliminar este nivel?\nSi lo hace no podrá recuperarlo'
-        self.background = 'images/fondos/errorFondo2.png'
+        self.title = '¿ESTÁ SEGURO QUE DESEA ELIMINAR EL NIVEL?\nNO SE PODRÁ RECUPERAR'
+        self.background = 'images/fondos/confPopup2.png'
         self.size_hint = (None, None)
-        self.size = (150, 200)
+        self.size = (200, 150)
         self.pos_hint= {'center_x': .5, 'center_y': .5}
         self.ids.no_eliminar.bind(on_release=self.dismiss)
 
@@ -79,20 +79,25 @@ class MiTitulo(ImageLabel):
 
     def editar_nombre(self):
         self.parent.parent.listo_para_guardar = False
-        self.parent.nombre_input = SelfValidateTextInput(background_color=(1, 1, 1, 0),
-            halign='center',
+        self.parent.nombre_input = TextInput(halign='center',
+            size_hint=(.99, .95),
             text=self.parent.nombre_nivel,
             multiline=False,
             write_tab=False,
-            foreground_color=BLANCO,
+            foreground_color=NEGRO,
+            pos_hint={'center_x':.5, 'center_y':.5},
             font_name = 'fonts/bebas_neue.ttf',
-            font_size = 30,
+            font_size = 25,
             on_text_validate = self.confirmar_nombre
-            )            #, pos_hint={'center_x':.5, 'center_y':.5}
-        self.parent.nombre_input.bind(on_focus=self.confirmar_nombre)
+            )
+        self.parent.nombre_input.bind(focus=self.confirmar_focus)
         self.parent.add_widget(self.parent.nombre_input, index=1)
         self.parent.lbl_nombre.opacity = 0
         Clock.schedule_once(self.esperar, .15)
+
+    def confirmar_focus(self, instance, value):
+        if not value:   #SIN FOCUS
+            self.confirmar_nombre(instance)
 
     def esperar(self, dt):
         self.parent.nombre_input.focus = True
@@ -117,16 +122,17 @@ class TabbedPanelHeaderEditable(TabbedPanelHeader):
     def editar_nombre(self):
         self.parent.parent.listo_para_guardar = False
         self.size_hint=(0, 1)
-        self.input = SelfValidateTextInput(background_color=(1, 1, 1, 0),
-            text=self.text, 
+        self.input = TextInput(text=self.text, 
+            background_active='images/botones/btn2_orange_down_edit.png',
             halign='center',
             multiline=False,
             write_tab=False,
-            foreground_color=BLANCO,
+            foreground_color=NEGRO,
             font_name = 'fonts/bebas_neue.ttf',
             font_size = 25,
             on_text_validate = self.confirmar_nombre)
         self.parent.add_widget(self.input, index=1)
+        self.input.bind(focus=self.confirmar_focus)
         self.opacity = 0
         Clock.schedule_once(self.esperar, .15)
     
@@ -134,6 +140,10 @@ class TabbedPanelHeaderEditable(TabbedPanelHeader):
         self.input.focus = True
         self.input.select_all()
         self.input.unfocus_on_touch=True
+
+    def confirmar_focus(self, instance, value):
+        if not value:   #SIN FOCUS
+            self.confirmar_nombre(instance)
 
     def confirmar_nombre(self, instance):
         nombre=instance.text.upper()
@@ -243,7 +253,7 @@ class TabsEditor(TabbedPanel):
 
     def __init__(self, nivel, **kwargs):
         super().__init__(**kwargs)
-        self.tab_width = self.width * 4 - 26
+        self.tab_width = self.width * 4 - 22
         self.do_default_tab = False
         self.background_color = (0, 0, 0, 0)
         self.tab_ronda_1 = TabbedPanelHeaderEditable(text=nivel[1], background_normal=self.BG_NORMAL, background_down=self.BG_DOWN, size_hint=(.95, 1))

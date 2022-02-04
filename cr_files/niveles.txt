@@ -24,26 +24,26 @@ VESTI&&DO&&En el sur de México y Centroamérica, las mujeres indígenas visten 
 
 <n>HOMBRES Y MUJERES<n>
 <t>HOMBRES<t>
-ALB&&ERTO&&El Flaco Spinetta, Durero, Einstein y el Presidente Fernández se llaman así
-BRU&&NO&&Batman, uno de los superhéroes más famosos, esconde su verdadera identidad. Él es un multimillonario llamado Díaz ...
-CAR&&LOS&&Grandes músicos argentinos comparten el mismo nombre: García, Gardel y hasta La Mona Jimenez se llaman ...
-DA&&NIEL&&Puede ser Travieso o actuar de Harry Potter, pero su nombre será siempre ...
-ESTE&&BAN&&Sentado en este banquito recuerdo que el segundo nombre del cantante Juanes es ...
-FRAN&&CISCO&&El primer Papa argentino o el último dictador de España se llaman ...
-GUI&&DO&&Kaczka y el hermano de Silvia Suller comparten este nombre
-HU&&GO&&No es jefe, pero es 'Boss', y es mi perfume masculino favorito
-IGNA&&CIO&&Si te llamás así, te apodarán como una comida tradicional mexicana. Aunque no te guste el cheddar
+ALB&&ERTO&&EL FLACO SPINETTA, DURERO, EINSTEIN Y EL PRESIDENTE FERNÁNDEZ SE LLAMAN ASÍ
+BRU&&NO&&BATMAN, UNO DE LOS SUPERHÉROES MÁS FAMOSOS, ESCONDE SU VERDADERA IDENTIDAD. ÉL ES UN MULTIMILLONARIO LLAMADO DÍAZ ...
+CAR&&LOS&&GRANDES MÚSICOS ARGENTINOS COMPARTEN EL MISMO NOMBRE: GARCÍA, GARDEL Y HASTA LA MONA JIMENEZ SE LLAMAN ...
+DA&&NIEL&&PUEDE SER TRAVIESO O ACTUAR DE HARRY POTTER, PERO SU NOMBRE SERÁ SIEMPRE ...
+ESTE&&BAN&&SENTADO EN ESTE BANQUITO RECUERDO QUE EL SEGUNDO NOMBRE DEL CANTANTE JUANES ES ...
+FRAN&&CISCO&&EL PRIMER PAPA ARGENTINO O EL ÚLTIMO DICTADOR DE ESPAÑA SE LLAMAN ...
+GUI&&DO&&KACZKA Y EL HERMANO DE SILVIA SULLER COMPARTEN ESTE NOMBRE
+HU&&GO&&NO ES JEFE, PERO ES 'BOSS', Y ES MI PERFUME MASCULINO FAVORITO
+IGNA&&CIO&&SI TE LLAMÁS ASÍ, TE APODARÁN COMO UNA COMIDA TRADICIONAL MEXICANA. AUNQUE NO TE GUSTE EL CHEDDAR
 <fin>
 <t>MUJERES<t>
-AND&&REA&&En Argentina es de mujer, pero en otros lugares es de hombre. La actriz Del Bocca lo lleva como nombre de pila
-BAR&&BARA&&No sólo es un adjetivo, sino que también un nombre, como sucede con la cantante estadounidense de apellido Streisend
-CAR&&LA&&Si Carlos hubiera sido mujer, probablemente se llamaría como la cantante italiana Bruni
-DEN&&ISE&&La cantante chilena Rosenthal y la modelo argentina Dumas se llaman así
-ER&&ICA&&Para Casados con Hijos, encarnó de manera perfecta a la bipolar María Elena Fuseneco. Su apellido es Rivas, y su nombre ...
-FLO&&RENCIA&&Nombre primaveral muy común entre las mujeres. Desde Peña hasta De la V
-GRAC&&IELA&&Para agradecer, la gente suele nombrar a la actriz Borges o a la vedette Alfano
-HIL&&DA&&La artista Lizarazu, quien cantó con Charlie García, ha contado que ama llamarse ...
-ISA&&BEL&&Nombre de reinas. Durante el siglo XV en España, hoy en Inglaterra
+AND&&REA&&EN ARGENTINA ES DE MUJER, PERO EN OTROS LUGARES ES DE HOMBRE. LA ACTRIZ DEL BOCCA LO LLEVA COMO NOMBRE DE PILA
+BAR&&BARA&&NO SÓLO ES UN ADJETIVO, SINO QUE TAMBIÉN UN NOMBRE, COMO SUCEDE CON LA CANTANTE ESTADOUNIDENSE DE APELLIDO STREISEND
+CAR&&LA&&SI CARLOS HUBIERA SIDO MUJER, PROBABLEMENTE SE LLAMARÍA COMO LA CANTANTE ITALIANA BRUNI
+DEN&&ISE&&LA CANTANTE CHILENA ROSENTHAL Y LA MODELO ARGENTINA DUMAS SE LLAMAN ASÍ
+ER&&ICA&&PARA CASADOS CON HIJOS, ENCARNÓ DE MANERA PERFECTA A LA BIPOLAR MARÍA ELENA FUSENECO. SU APELLIDO ES RIVAS, Y SU NOMBRE ...
+FLO&&RENCIA&&NOMBRE PRIMAVERAL MUY COMÚN ENTRE LAS MUJERES. DESDE PEÑA HASTA DE LA V
+GRAC&&IELA&&PARA AGRADECER, LA GENTE SUELE NOMBRAR A LA ACTRIZ BORGES O A LA VEDETTE ALFANO
+HIL&&DA&&LA ARTISTA LIZARAZU, QUIEN CANTÓ CON CHARLIE GARCÍA, HA CONTADO QUE AMA LLAMARSE ...
+ISA&&BEL&&NOMBRE DE REINAS. DURANTE EL SIGLO XV EN ESPAÑA, HOY EN INGLATERRA
 <fin>
 
 <n>¡PARÁ, MONO!<n>
@@ -66,6 +66,12 @@ FERN&&ALIA&&ME GUSTAN LAS FIESTAS COLORIDAS, ME ENCANTA QUE TENGA MUCHA ...
 <fin>
 
 <n>NIVEL DE PRUEBA, BORRAR CUANDO ESTE LISTO EL PROGRAMA<n>
+<t>PRIMERA RONDA<t>
+<fin>
+<t>SEGUNDA RONDA<t>
+<fin>
+
+<n>HOLA<n>
 <t>PRIMERA RONDA<t>
 <fin>
 <t>SEGUNDA RONDA<t>

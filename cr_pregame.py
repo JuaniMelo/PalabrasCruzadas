@@ -121,7 +121,7 @@ class crPregame(BoxLayout):
         self.opcion2.bind(state=self.opB_estado)
         self.add_widget(Label(size_hint=(1, .03)))
     #BOTONES
-        botones = BoxLayout(size_hint=(1, .1), spacing=30, padding=(30, 0))
+        botones = BoxLayout(size_hint=(1, .08), spacing=30, padding=(30, 0))
         boton_ver = ButtonOrange(text='EDITAR', font_name='fonts/bebas_neue.ttf', font_size=25)
         boton_ver.bind(on_release=self.ver_lista)
         botones.add_widget(boton_ver)
