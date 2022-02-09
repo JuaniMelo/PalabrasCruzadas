@@ -40,7 +40,7 @@ class crRonda(RelativeLayout):
     AMARILLO=(204/255, 189/255, 18/255, 1)
     MAGENTA=(180/255, 23/255, 222/255, 1)
     FPS = 30
-    SEGUNDOS_RONDA = 31
+    SEGUNDOS_RONDA = 51
     FUENTE = 'fonts/bebas_neue.ttf'
     ALT_FUENTE = 20
     COLOR = (200/255, 0, 100/255, 1)
@@ -102,6 +102,7 @@ class crRonda(RelativeLayout):
 
     def terminar_ronda(self):
         self.juego_activo = False
+        self.parent.tiempo_ronda.append(int(self.tiempo_actual/self.FPS))
         self.menu = crGameMenuFinal(self.nivel, self.aciertos)
         self.add_widget(self.menu)
         Clock.schedule_once(self.wait, 3)
@@ -111,23 +112,6 @@ class crRonda(RelativeLayout):
 
     def siguiente_ronda(self):
         self.parent.siguiente_ronda()               #PROGRAMAR ESTO EN LA SCREEN VIEW
-
-    '''def obtener_pista(self, i):
-        texto = self.lista_palabras[i][2]
-        if len(texto) <= self.LONG_PARRAFO_PISTA:
-            self.pista = texto
-        else:
-            renglones = []
-            aux = ''
-            for word in texto.split(' '):
-                if len(aux) > self.LONG_PARRAFO_PISTA:
-                    renglones.append(aux)
-                    aux = ''
-                aux += f'{word} '
-            if renglones[-1] < aux:
-                renglones.append(aux)
-            self.pista = '\n'.join(renglones)
-        self.lbl_pista.text = self.pista'''
 
     def obtener_pista(self, i):
         if len(self.lista_palabras[i][2]) < self.LONG_PARRAFO_PISTA:
@@ -169,10 +153,13 @@ class crRonda(RelativeLayout):
         rtaPP = self.lista_palabras[self.contador_pistas][0]
         rtaSP = self.lista_palabras[self.contador_pistas][1]
         for i in range(len(self.columnas.lista_mezclada_PP)):
-            if self.columnas.lista_mezclada_PP[i] == rtaPP:
+            if self.columnas.lista_mezclada_PP[i] == rtaPP and self.columnas.lblPP[i].opacity != 0.1:
                 self.columnas.lblPP[i].opacity = 0.1
-            if self.columnas.lista_mezclada_SP[i] == rtaSP:
+                break
+        for i in range(len(self.columnas.lista_mezclada_SP)):
+            if self.columnas.lista_mezclada_SP[i] == rtaSP and self.columnas.lblSP[i].opacity != 0.1:
                 self.columnas.lblSP[i].opacity = 0.1
+                break
 
     def wait(self, dt):
         pass

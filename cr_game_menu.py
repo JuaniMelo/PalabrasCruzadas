@@ -1,4 +1,3 @@
-from turtle import width
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.image import Image
@@ -64,6 +63,10 @@ class crGameMenuFinal(BoxLayout):
         self.nombre_ronda = nombre_ronda
         self.source='images/fondos/fondo_menu.png'
         self.lista_aciertos = lista_aciertos
+        self.cont_aciertos = 0
+        for acierto in self.lista_aciertos:
+            if acierto:
+                self.cont_aciertos += 1
         self.orientation = 'vertical'
         self.padding = 10
         self.init_layout()
@@ -104,7 +107,8 @@ class crGameMenuFinal(BoxLayout):
         else:
             for i in range(len(self.palabras_no_acertadas)):
                 Clock.schedule_once(partial(self.clock_agregar_error, i), (i/20)-.05)
-                '''self.lbl_no_acertadas.append('')
+        self.parent.parent.aciertos_ronda.append(self.cont_aciertos)
+        '''self.lbl_no_acertadas.append('')
                 self.lbl_no_acertadas[i] = ColorLabel(text=self.palabras_no_acertadas[i], color=self.ROJO, font_name=self.FUENTE, size_hint=(None, None), size=(140, 30), font_size=self.ALT_FUENTE)
                 self.errores.add_widget(self.lbl_no_acertadas[i])'''
 
@@ -119,6 +123,7 @@ class crGameMenuFinal(BoxLayout):
         return palabras_acertadas, palabras_no_acertadas
 
     def apretar_boton_siguiente(self, instance):
+        #self.parent.parent.aciertos_ronda.append(self.cont_aciertos)
         self.parent.siguiente_ronda()
 
     def clock_agregar_error(self, i, dt):

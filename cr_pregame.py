@@ -153,21 +153,20 @@ class crPregame(BoxLayout):
 
     def pasar_screen(self, instance):
     #Chequea que las listas de rondas no estén vacías
-        if self.nivel_elegido == '':
-            return
-        elif self.nivel_elegido == self.opA:
-            self.nivel_no_elegido = self.opB
-            if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
-                self.box_error = MiPopup()
-                self.box_error.open()
-                return
-        elif self.nivel_elegido == self.opB:
-            self.nivel_no_elegido = self.opA
-            if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
-                self.box_error = MiPopup()
-                self.box_error.open()
-                return
-        self.parent.parent.parent.crear_juego(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
+        if self.nivel_elegido != '':
+            if self.nivel_elegido == self.opA:
+                self.nivel_no_elegido = self.opB
+                if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
+                    self.box_error = MiPopup()
+                    self.box_error.open()
+                    return
+            else:
+                self.nivel_no_elegido = self.opA
+                if len(obtener_lista_palabras(self.nombre_nivel,self.opA)) == 0 or len(obtener_lista_palabras(self.nombre_nivel,self.opB)) == 0:
+                    self.box_error = MiPopup()
+                    self.box_error.open()
+                    return
+            self.parent.parent.parent.parent.comenzar_nivel(self.nombre_nivel, self.nivel_elegido, self.nivel_no_elegido)
 
     def ver_lista(self, instance):
         self.parent.parent.parent.source = 'images/fondos/sCruzadas_azul.png'

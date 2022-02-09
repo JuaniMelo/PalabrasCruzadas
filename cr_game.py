@@ -7,6 +7,7 @@ from cr_game_ronda import *
 from cr_menu import *
 from cr_pregame import *
 from cr_registro import *
+from cr_game_puntos import *
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
 Window.size = (960, 540)
@@ -20,24 +21,45 @@ class Juego(Screen):
         self.primera_ronda = ronda1
         self.segunda_ronda = ronda2
         self.nombre_nivel = nombre_nivel
+        self.init_resultados()
         self.cont_rondas = 0
+        self.boton_salir = ButtonOrange(text='<',
+            size_hint=(None, None),
+            bold = True,
+            width=30,
+            height=30,
+            pos=(10,Window.height-40),
+            on_release=self.salir_del_juego)     #pos_hint={'left':1,'top':1}
+        self.add_widget(self.boton_salir)
         self.init_layout()
+
+    def init_resultados(self):
+        self.tiempo_ronda = []
+        self.aciertos_ronda = []
+
+    def salir_del_juego(self, instance):
+        self.parent.salir_del_juego()
         
     def init_layout(self):
         lista_palabras = obtener_lista_palabras(self.nombre_nivel, self.primera_ronda)
         self.juego = crRonda(self.primera_ronda, lista_palabras)
-        self.add_widget(self.juego)
+        self.add_widget(self.juego, index=1)
 
     def siguiente_ronda(self):
         self.cont_rondas += 1
         if self.cont_rondas < 2:
-            self.clear_widgets()
+            self.remove_widget(self.juego)
             lista_palabras = obtener_lista_palabras(self.nombre_nivel, self.segunda_ronda)
             self.juego = crRonda(self.segunda_ronda, lista_palabras)
-            self.add_widget(self.juego)
+            self.add_widget(self.juego, index=1)
         else:
-            self.clear_widgets()        #CAMBIAR DE PANTALLA AL RESUMEN DE LOS PUNTOS DE CADA EQUIPO
-            pass
+            self.remove_widget(self.boton_salir)
+            print(self.tiempo_ronda)
+            print(self.aciertos_ronda)
+            self.crear_pantalla_puntos()        #CAMBIAR DE PANTALLA AL RESUMEN DE LOS PUNTOS DE CADA EQUIPO
+
+    def crear_pantalla_puntos(self):
+        self.pantalla_puntos = crGamePuntos(self.nombre_nivel, self.tiempo_ronda, self.aciertos_ronda)
 
     def volver_al_menu(self):
         pass
