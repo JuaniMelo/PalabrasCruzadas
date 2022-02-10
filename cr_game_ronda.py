@@ -40,7 +40,7 @@ class crRonda(RelativeLayout):
     AMARILLO=(204/255, 189/255, 18/255, 1)
     MAGENTA=(180/255, 23/255, 222/255, 1)
     FPS = 30
-    SEGUNDOS_RONDA = 51
+    SEGUNDOS_RONDA = 61
     FUENTE = 'fonts/bebas_neue.ttf'
     ALT_FUENTE = 20
     COLOR = (200/255, 0, 100/255, 1)
